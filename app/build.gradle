@@ -5,11 +5,11 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.liudonghan.kit"
+        applicationId "com.liudonghan.main"
         minSdkVersion 17
         targetSdkVersion 31
-        versionCode 1
-        versionName "1.0"
+        versionCode VERSAION_CODE.toInteger()
+        versionName VERSAION_NAME.toString()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -25,6 +25,17 @@ android {
         flatDir {
             dirs 'libs', '../kit/libs'
         }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDir 'libs'
+            jni.srcDirs = []    //disable automatic ndk-build
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 

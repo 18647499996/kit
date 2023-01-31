@@ -1,4 +1,4 @@
-package com.liudonghan.kit;
+package com.liudonghan.main;
 
 import org.junit.Test;
 

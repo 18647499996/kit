@@ -1,8 +1,10 @@
-package com.liudonghan.kit;
+package com.liudonghan.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.liudonghan.kit.AliPayUtils;
 
 public class MainActivity extends AppCompatActivity {
 
