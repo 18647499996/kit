@@ -9,7 +9,7 @@ import com.liudonghan.kit.oss.ADCosServiceFactory;
 import com.liudonghan.kit.pay.ADAliPayUtils;
 import com.liudonghan.kit.pay.ADWxPayUtils;
 
-public class MainActivity extends AppCompatActivity implements OnADPayResultListener {
+public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnPayResultListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
