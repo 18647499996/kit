@@ -1,4 +1,4 @@
-package com.liudonghan.kit.oss;
+package com.liudonghan.kit.oss.impl;
 
 
 import android.content.Context;
@@ -10,13 +10,6 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 
-
-import com.liudonghan.kit.oss.impl.TVCClient;
-import com.liudonghan.kit.oss.impl.TVCConstants;
-import com.liudonghan.kit.oss.impl.TVCUploadInfo;
-import com.liudonghan.kit.oss.impl.TVCUploadListener;
-import com.liudonghan.kit.oss.impl.TVCUtils;
-import com.liudonghan.kit.oss.impl.TXUGCPublishOptCenter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,7 +23,7 @@ public class TXUGCPublish {
     private static final long                                        COVER_TIME = 500 * 1000;
     private Context mContext;
     private Handler mHandler;
-    private              TXUGCPublishTypeDef.ITXVideoPublishListener mListener;
+    private TXUGCPublishTypeDef.ITXVideoPublishListener mListener;
     private              TXUGCPublishTypeDef.ITXMediaPublishListener mMediaListener;
     private              boolean                                     mPublishing;
     private TVCClient mTVCClient = null;

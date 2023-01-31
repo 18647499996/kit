@@ -5,21 +5,20 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.liudonghan.kit.oss.CosServiceFactory;
-import com.liudonghan.kit.pay.AliPayUtils;
-import com.liudonghan.kit.pay.OnPayResultListener;
-import com.liudonghan.kit.pay.WxPayUtils;
+import com.liudonghan.kit.oss.ADCosServiceFactory;
+import com.liudonghan.kit.pay.ADAliPayUtils;
+import com.liudonghan.kit.pay.ADWxPayUtils;
 
-public class MainActivity extends AppCompatActivity implements OnPayResultListener {
+public class MainActivity extends AppCompatActivity implements OnADPayResultListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        AliPayUtils.getInstance().setOnPayResultListener(this);
-        findViewById(R.id.alipay).setOnClickListener(view -> AliPayUtils.getInstance().pay(MainActivity.this, ""));
-        findViewById(R.id.wxpay).setOnClickListener(view -> WxPayUtils.getInstance().pay(MainActivity.this,"","","","","",""));
-        CosServiceFactory.getInstance().uploadFile(this, "", "", new CosServiceFactory.OnUploadListener() {
+        ADAliPayUtils.getInstance().setOnPayResultListener(this);
+        findViewById(R.id.alipay).setOnClickListener(view -> ADAliPayUtils.getInstance().pay(MainActivity.this, ""));
+        findViewById(R.id.wxpay).setOnClickListener(view -> ADWxPayUtils.getInstance().pay(MainActivity.this,"","","","","",""));
+        ADCosServiceFactory.getInstance().uploadFile(this, "", "", new ADCosServiceFactory.OnUploadListener() {
             @Override
             public void onProgress(long current, long total) {
 

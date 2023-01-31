@@ -2,7 +2,7 @@ package com.liudonghan.main;
 
 import android.app.Application;
 
-import com.liudonghan.kit.oss.CosServiceFactory;
+import com.liudonghan.kit.oss.ADCosServiceFactory;
 
 /**
  * Description：
@@ -15,6 +15,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        CosServiceFactory.getInstance().setConfig("AKID5zd06vTlnX2GDtJTMyIM9esqWv2sSlnY","VjgMltkKjsoTrzqPhjUyA6l9F4cttc4F","shops-1307611133","ap-beijing");
+        ADCosServiceFactory.getInstance().setConfig("AKID5zd06vTlnX2GDtJTMyIM9esqWv2sSlnY","VjgMltkKjsoTrzqPhjUyA6l9F4cttc4F","shops-1307611133","ap-beijing");
     }
 }

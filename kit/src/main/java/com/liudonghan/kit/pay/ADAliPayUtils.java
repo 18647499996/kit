@@ -18,7 +18,7 @@ import java.util.Map;
  * @author Created by: Li_Min
  * Time:1/31/23
  */
-public class AliPayUtils {
+public class ADAliPayUtils {
 
     private static final int SDK_PAY_FLAG = 1;
     private static final int SDK_CHECK_FLAG = 2;
@@ -26,32 +26,23 @@ public class AliPayUtils {
     private OnPayResultListener onPayResultListener;
 
 
-    private static volatile AliPayUtils instance = null;
+    private static volatile ADAliPayUtils instance = null;
 
 
-    private AliPayUtils() {
+    private ADAliPayUtils() {
     }
 
-    public static AliPayUtils getInstance() {
+    public static ADAliPayUtils getInstance() {
         //single chcekout
         if (null == instance) {
-            synchronized (AliPayUtils.class) {
+            synchronized (ADAliPayUtils.class) {
                 // double checkout
                 if (null == instance) {
-                    instance = new AliPayUtils();
+                    instance = new ADAliPayUtils();
                 }
             }
         }
         return instance;
-    }
-
-    /**
-     * 设置监听
-     *
-     * @param onPayResultListener 支付回调
-     */
-    public void setOnPayResultListener(OnPayResultListener onPayResultListener) {
-        this.onPayResultListener = onPayResultListener;
     }
 
     /**
@@ -87,7 +78,7 @@ public class AliPayUtils {
                     onPayResultListener.onPayProgress();
                     break;
                 case SDK_PAY_FLAG:
-                    PayResult payResult = new PayResult((Map<String, String>) msg.obj);
+                    ADPayResult payResult = new ADPayResult((Map<String, String>) msg.obj);
                     Log.d("AliPayUtils：", "Pay CallBack Info ：" + payResult.toString());
                     switch (payResult.getResultStatus()) {
                         case "9000":
@@ -113,5 +104,40 @@ public class AliPayUtils {
         }
     };
 
+
+    /**
+     * 设置监听
+     *
+     * @param onPayResultListener 支付回调
+     */
+    public void setOnPayResultListener(OnPayResultListener onPayResultListener) {
+        this.onPayResultListener = onPayResultListener;
+    }
+
+    public interface OnPayResultListener {
+
+        /**
+         * 支付成功
+         */
+        void onPaySucceed();
+
+        /**
+         * 支付中
+         */
+        void onPayProgress();
+
+        /**
+         * 支付取消
+         */
+        void onPayCancel();
+
+        /**
+         * 支付失败
+         *
+         * @param resultStatus 异常码
+         * @param result       异常信息
+         */
+        void onPayFail(String resultStatus, String result);
+    }
 
 }

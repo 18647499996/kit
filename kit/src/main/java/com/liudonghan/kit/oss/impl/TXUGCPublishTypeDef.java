@@ -1,4 +1,4 @@
-package com.liudonghan.kit.oss;
+package com.liudonghan.kit.oss.impl;
 
 /**
  * Created by yuejiaoli on 2017/7/19.

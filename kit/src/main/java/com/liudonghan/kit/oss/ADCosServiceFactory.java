@@ -4,6 +4,8 @@ import android.content.Context;
 
 import androidx.annotation.Nullable;
 
+import com.liudonghan.kit.oss.impl.TXUGCPublish;
+import com.liudonghan.kit.oss.impl.TXUGCPublishTypeDef;
 import com.tencent.cos.xml.CosXmlService;
 import com.tencent.cos.xml.CosXmlServiceConfig;
 import com.tencent.cos.xml.exception.CosXmlClientException;
@@ -27,7 +29,7 @@ import java.util.Objects;
  * @author Created by: Li_Min
  * Time:
  */
-public class CosServiceFactory {
+public class ADCosServiceFactory {
 
     public String DEFAULT_REGION = "";
 
@@ -40,18 +42,18 @@ public class CosServiceFactory {
     public static Map<String, CosXmlService> cosXmlServiceMap = new HashMap<>();
 
 
-    private static volatile CosServiceFactory instance = null;
+    private static volatile ADCosServiceFactory instance = null;
 
-    private CosServiceFactory() {
+    private ADCosServiceFactory() {
     }
 
-    public static CosServiceFactory getInstance() {
+    public static ADCosServiceFactory getInstance() {
         //single chcekout
         if (null == instance) {
-            synchronized (CosServiceFactory.class) {
+            synchronized (ADCosServiceFactory.class) {
                 // double checkout
                 if (null == instance) {
-                    instance = new CosServiceFactory();
+                    instance = new ADCosServiceFactory();
                 }
             }
         }

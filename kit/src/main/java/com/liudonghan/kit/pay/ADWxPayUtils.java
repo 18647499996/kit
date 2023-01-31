@@ -12,19 +12,19 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
  * @author Created by: Li_Min
  * Time:1/31/23
  */
-public class WxPayUtils {
-    private static volatile WxPayUtils instance = null;
+public class ADWxPayUtils {
+    private static volatile ADWxPayUtils instance = null;
 
-    private WxPayUtils() {
+    private ADWxPayUtils() {
     }
 
-    public static WxPayUtils getInstance() {
+    public static ADWxPayUtils getInstance() {
         //single chcekout
         if (null == instance) {
-            synchronized (WxPayUtils.class) {
+            synchronized (ADWxPayUtils.class) {
                 // double checkout
                 if (null == instance) {
-                    instance = new WxPayUtils();
+                    instance = new ADWxPayUtils();
                 }
             }
         }

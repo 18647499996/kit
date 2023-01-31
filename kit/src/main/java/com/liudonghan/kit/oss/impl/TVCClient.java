@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.liudonghan.kit.oss.TXUGCPublishTypeDef;
 import com.liudonghan.kit.oss.impl.compute.TXHttpTaskMetrics;
 import com.liudonghan.kit.oss.impl.compute.TXOnGetHttpTaskMetrics;
 import com.tencent.cos.xml.CosXmlService;
