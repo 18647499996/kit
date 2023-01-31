@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.liudonghan.main"
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 31
         versionCode VERSAION_CODE.toInteger()
         versionName VERSAION_NAME.toString()
@@ -19,23 +19,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-
-    repositories {
-        flatDir {
-            dirs 'libs', '../kit/libs'
-        }
-    }
-    sourceSets {
-        main {
-            jniLibs.srcDir 'libs'
-            jni.srcDirs = []    //disable automatic ndk-build
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 

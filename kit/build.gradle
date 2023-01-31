@@ -20,7 +20,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 31
         versionCode VERSAION_CODE.toInteger()
         versionName VERSAION_NAME.toString()
@@ -35,22 +35,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
-    repositories {
-        flatDir {
-            dirs 'libs'
-        }
-    }
-    sourceSets {
-        main {
-            jniLibs.srcDir 'libs'
-            jni.srcDirs = []    //disable automatic ndk-build
-        }
-    }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     // 支付宝支付
-    api (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
+    implementation 'com.alipay.sdk:alipaysdk-android:15.8.11'
 }
