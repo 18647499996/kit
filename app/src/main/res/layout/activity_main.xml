@@ -22,5 +22,21 @@
         app:layout_constraintLeft_toRightOf="@id/alipay"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/oss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OSS"
+        app:layout_constraintLeft_toRightOf="@id/wxpay"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        app:layout_constraintLeft_toRightOf="@id/oss"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

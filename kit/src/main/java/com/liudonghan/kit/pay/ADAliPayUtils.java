@@ -23,6 +23,8 @@ public class ADAliPayUtils {
     private static final int SDK_PAY_FLAG = 1;
     private static final int SDK_CHECK_FLAG = 2;
 
+    private static final String TAG = "Mac_Liu";
+
     private OnPayResultListener onPayResultListener;
 
 
@@ -79,7 +81,7 @@ public class ADAliPayUtils {
                     break;
                 case SDK_PAY_FLAG:
                     ADPayResult payResult = new ADPayResult((Map<String, String>) msg.obj);
-                    Log.d("AliPayUtils：", "Pay CallBack Info ：" + payResult.toString());
+                    Log.i(TAG, "Pay CallBack Info ：" + payResult.toString());
                     switch (payResult.getResultStatus()) {
                         case "9000":
                             onPayResultListener.onPaySucceed();

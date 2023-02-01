@@ -10,14 +10,33 @@ android {
         targetSdkVersion 31
         versionCode VERSAION_CODE.toInteger()
         versionName VERSAION_NAME.toString()
-
+        manifestPlaceholders = [
+                MAP_KEY : '3a83d6e0dc3928e55c44861ee0fc9161'
+        ]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+
+    }
+    signingConfigs {
+        release {
+            keyAlias 'xflife'
+            keyPassword '1234567890'
+            storeFile file('../xflife.jks')
+            storePassword '1234567890'
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            //debug时使用release签名
+            signingConfig signingConfigs.release
+            //Zip代码压缩优化
+            zipAlignEnabled true
         }
     }
 
@@ -35,5 +54,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation project(path: ':kit')
+
+    api 'com.github.18647499996:multi-image-selector:2.0.2'
 
 }

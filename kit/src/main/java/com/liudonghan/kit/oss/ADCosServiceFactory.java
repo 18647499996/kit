@@ -120,15 +120,15 @@ public class ADCosServiceFactory {
      * 腾讯OSS文件上传
      *
      * @param context          上下文
-     * @param cosPath          文件标识
-     * @param srcPath          文件绝对路径
+     * @param storageName      文件存储名称
+     * @param filePath         文件绝对路径
      * @param onUploadListener 上传回调
      */
-    public void uploadFile(Context context, String cosPath, String srcPath, OnUploadListener onUploadListener) {
+    public void uploadFile(Context context, String storageName, String filePath, OnUploadListener onUploadListener) {
         COSXMLUploadTask cosxmlUploadTask = new TransferManager(getCosXmlService(context, SECRET_ID, SECRET_KEY, false),
                 new TransferConfig
                         .Builder()
-                        .build()).upload(BUCKET_NAME, cosPath, srcPath, null);
+                        .build()).upload(BUCKET_NAME, storageName, filePath, null);
         // 上传进度
         cosxmlUploadTask.setCosXmlProgressListener(onUploadListener::onProgress);
         cosxmlUploadTask.setCosXmlResultListener(new CosXmlResultListener() {
