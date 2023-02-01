@@ -9,29 +9,73 @@ import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentActivity;
 
-import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.core.PoiItemV2;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeQuery;
+import com.amap.api.services.help.Inputtips;
+import com.amap.api.services.help.InputtipsQuery;
+import com.amap.api.services.help.Tip;
+import com.amap.api.services.poisearch.PoiResultV2;
+import com.amap.api.services.poisearch.PoiSearchV2;
+import com.amap.api.services.weather.LocalWeatherForecastResult;
+import com.amap.api.services.weather.LocalWeatherLiveResult;
 import com.amap.api.services.weather.WeatherSearch;
 import com.amap.api.services.weather.WeatherSearchQuery;
+import com.liudonghan.kit.location.listener.OnADInputTipsQueryListener;
+import com.liudonghan.kit.location.listener.OnADLocationUtilsListener;
+import com.liudonghan.kit.location.listener.OnADWeatherSearchListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 /**
- * Description：
+ * Description：定位工具类
+ * <p>
+ * // todo 设置是否单次定位 mLocationOption.setOnceLocation();
+ * 默认值：false
+ * // todo 设置仅设备模式/高精度模式的系统定位自动回调最少间隔距离值 mLocationOption.setDeviceModeDistanceFilter();
+ * 默认值：0米
+ * 只有当定位模式为AMapLocationClientOption.AMapLocationMode.Device_Sensors（仅设备模式）或 AMapLocationClientOption.AMapLocationMode.Hight_Accuracy（高精度模式）有效，值小于0时无效
+ * // todo 设置首次定位是否等待卫星定位结果 mLocationOption.setGpsFirst();
+ * 默认值：false
+ * 只有在单次定位高精度定位模式下有效
+ * 设置为true时，会等待卫星定位结果返回，最多等待30秒，若30秒后仍无卫星定位结果返回，返回网络定位结果
+ * 从4.5.0版本开始等待卫星定位结果返回的时间可以通过 AMapLocationClientOption.setGpsFirstTimeout(long)进行设置
+ * // todo 设置发起定位请求的时间间隔 mLocationOption.setInterval();
+ * 默认值：2000毫秒
+ * // todo 设置联网超时时间 mLocationOption.setHttpTimeOut();
+ * 默认值：30000毫秒
+ * // todo 设置定位模式 mLocationOption.setLocationMode();
+ * // todo 设置是否返回地址信息，默认返回地址信息 mLocationOption.setNeedAddress();
+ * 默认值：true, 返回地址信息 2.9.0之前的版本定位类型为AMapLocation.LOCATION_TYPE_GPS时不会返回地址信息
+ * 自2.9.0版本开始，当类型为AMapLocation.LOCATION_TYPE_GPS时也可以返回地址信息(需要网络通畅，第一次有可能没有地址信息返回）
+ * // todo 设置退出时是否杀死进程 mLocationOption.setKillProcess();
+ * 默认值:false, 不杀死
+ * 注意：如果设置为true，并且配置的service不是remote的则会杀死当前页面进程，请慎重使用
+ * // todo 设置是否使用缓存策略 mLocationOption.setLocationCacheEnable();
+ * 默认为true 使用缓存策略
+ * // todo 设置是否使用设备传感器 mLocationOption.setSensorEnable();
+ * 默认值：false 不使用设备传感器
+ * // todo 设置是否允许调用WIFI刷新 mLocationOption.setWifiScan();
+ * 默认值为true，
+ * 当设置为false时会停止主动调用WIFI刷新，将会极大程度影响定位精度，但可以有效的降低定位耗电
+ * // todo 设置定位是否等待WIFI列表刷新 定位精度会更高，但是定位速度会变慢1-3秒 从3.7.0版本开始，支持连续定位（连续定位时首次会等待刷新） 3.7.0之前的版本，仅适用于单次定位，当设置为true时，连续定位会自动变为单次定位, mLocationOption.setOnceLocationLatest();
+ * // todo 设置逆地理信息的语言,目前之中中文和英文 mLocationOption.setGeoLanguage();
+ * 默认值：AMapLocationClientOption.GeoLanguage.DEFAULT
  *
  * @author Created by: Li_Min
  * Time:2019/11/29
@@ -43,6 +87,7 @@ public class ADLocationUtils {
     private static volatile ADLocationUtils instance = null;
     private AMapLocationClient aMapLocationClient;
     private LocationManager locationManager;
+    private AMapLocationClientOption aMapLocationClientOption;
 
     private ADLocationUtils() {
     }
@@ -62,37 +107,6 @@ public class ADLocationUtils {
 
     /**
      * 配置定位
-     * // todo 设置是否单次定位 mLocationOption.setOnceLocation();
-     * 默认值：false
-     * // todo 设置仅设备模式/高精度模式的系统定位自动回调最少间隔距离值 mLocationOption.setDeviceModeDistanceFilter();
-     * 默认值：0米
-     * 只有当定位模式为AMapLocationClientOption.AMapLocationMode.Device_Sensors（仅设备模式）或 AMapLocationClientOption.AMapLocationMode.Hight_Accuracy（高精度模式）有效，值小于0时无效
-     * // todo 设置首次定位是否等待卫星定位结果 mLocationOption.setGpsFirst();
-     * 默认值：false
-     * 只有在单次定位高精度定位模式下有效
-     * 设置为true时，会等待卫星定位结果返回，最多等待30秒，若30秒后仍无卫星定位结果返回，返回网络定位结果
-     * 从4.5.0版本开始等待卫星定位结果返回的时间可以通过 AMapLocationClientOption.setGpsFirstTimeout(long)进行设置
-     * // todo 设置发起定位请求的时间间隔 mLocationOption.setInterval();
-     * 默认值：2000毫秒
-     * // todo 设置联网超时时间 mLocationOption.setHttpTimeOut();
-     * 默认值：30000毫秒
-     * // todo 设置定位模式 mLocationOption.setLocationMode();
-     * // todo 设置是否返回地址信息，默认返回地址信息 mLocationOption.setNeedAddress();
-     * 默认值：true, 返回地址信息 2.9.0之前的版本定位类型为AMapLocation.LOCATION_TYPE_GPS时不会返回地址信息
-     * 自2.9.0版本开始，当类型为AMapLocation.LOCATION_TYPE_GPS时也可以返回地址信息(需要网络通畅，第一次有可能没有地址信息返回）
-     * // todo 设置退出时是否杀死进程 mLocationOption.setKillProcess();
-     * 默认值:false, 不杀死
-     * 注意：如果设置为true，并且配置的service不是remote的则会杀死当前页面进程，请慎重使用
-     * // todo 设置是否使用缓存策略 mLocationOption.setLocationCacheEnable();
-     * 默认为true 使用缓存策略
-     * // todo 设置是否使用设备传感器 mLocationOption.setSensorEnable();
-     * 默认值：false 不使用设备传感器
-     * // todo 设置是否允许调用WIFI刷新 mLocationOption.setWifiScan();
-     * 默认值为true，
-     * 当设置为false时会停止主动调用WIFI刷新，将会极大程度影响定位精度，但可以有效的降低定位耗电
-     * // todo 设置定位是否等待WIFI列表刷新 定位精度会更高，但是定位速度会变慢1-3秒 从3.7.0版本开始，支持连续定位（连续定位时首次会等待刷新） 3.7.0之前的版本，仅适用于单次定位，当设置为true时，连续定位会自动变为单次定位, mLocationOption.setOnceLocationLatest();
-     * // todo 设置逆地理信息的语言,目前之中中文和英文 mLocationOption.setGeoLanguage();
-     * 默认值：AMapLocationClientOption.GeoLanguage.DEFAULT
      *
      * @param aMapLocationClientOption 定位配置参数
      * @return ADLocationUtils
@@ -136,35 +150,20 @@ public class ADLocationUtils {
             AMapLocationClient.setApiKey(appKey);
             AMapLocationClient.updatePrivacyAgree(context, true);
             AMapLocationClient.updatePrivacyShow(context, true, true);
-            aMapLocationClient = new AMapLocationClient(context);
-            aMapLocationClient.setLocationOption(aMapLocationClientOption);
+            this.aMapLocationClientOption = aMapLocationClientOption;
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    /**
-     * 获取高德天气情况
-     *
-     * @param context                 上下文
-     * @param city                    城市
-     * @param weatherType             实况天气 WeatherSearchQuery.WEATHER_TYPE_LIVE
-     *                                预报天气 WeatherSearchQuery.WEATHER_TYPE_FORECAST
-     * @param onWeatherSearchListener 天气实况回调
-     */
-    public void getCityWeather(Context context, String city, int weatherType, WeatherSearch.OnWeatherSearchListener onWeatherSearchListener) {
-        WeatherSearchQuery weatherSearchQuery = new WeatherSearchQuery(city, weatherType);
-        WeatherSearch weatherSearch;
+    public ADLocationUtils getLocation(Context context) {
         try {
-            weatherSearch = new WeatherSearch(context);
-            weatherSearch.setOnWeatherSearchListener(onWeatherSearchListener);
-            weatherSearch.setQuery(weatherSearchQuery);
-            weatherSearch.searchWeatherAsyn();
-        } catch (AMapException e) {
+            aMapLocationClient = new AMapLocationClient(context);
+            aMapLocationClient.setLocationOption(aMapLocationClientOption);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-
+        return this;
     }
 
     /**
@@ -192,6 +191,117 @@ public class ADLocationUtils {
         return this;
     }
 
+    /**
+     * 获取高德天气情况
+     *
+     * @param context                   上下文
+     * @param city                      城市
+     * @param weatherType               实况天气 WeatherSearchQuery.WEATHER_TYPE_LIVE
+     *                                  预报天气 WeatherSearchQuery.WEATHER_TYPE_FORECAST
+     * @param onADWeatherSearchListener 天气实况回调
+     */
+    public void getCityWeather(Context context, String city, int weatherType, OnADWeatherSearchListener onADWeatherSearchListener) {
+        WeatherSearch weatherSearch;
+        try {
+            weatherSearch = new WeatherSearch(context);
+            weatherSearch.setQuery(new WeatherSearchQuery(city, weatherType));
+            weatherSearch.setOnWeatherSearchListener(new WeatherSearch.OnWeatherSearchListener() {
+                @Override
+                public void onWeatherLiveSearched(LocalWeatherLiveResult localWeatherLiveResult, int i) {
+                    if (1000 == i) {
+                        if (null != localWeatherLiveResult && null != localWeatherLiveResult.getLiveResult()) {
+                            onADWeatherSearchListener.onWeatherLiveSearched(localWeatherLiveResult.getLiveResult());
+                        } else {
+                            onADWeatherSearchListener.onFail(9999, "未查询到天气实况");
+                        }
+                    } else {
+                        onADWeatherSearchListener.onFail(i, "实况天气查询失败");
+                    }
+                }
+
+                @Override
+                public void onWeatherForecastSearched(LocalWeatherForecastResult localWeatherForecastResult, int i) {
+                    if (1000 == i) {
+                        if (null != localWeatherForecastResult && null != localWeatherForecastResult.getForecastResult()) {
+                            onADWeatherSearchListener.onWeatherForecastSearched(localWeatherForecastResult.getForecastResult());
+                        } else {
+                            onADWeatherSearchListener.onFail(9999, "未查询到天气预报");
+                        }
+                    } else {
+                        onADWeatherSearchListener.onFail(i, "天气预报查询失败");
+                    }
+                }
+            });
+            weatherSearch.searchWeatherAsyn();
+        } catch (AMapException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 地址内容自动匹配器
+     *
+     * @param fragmentActivity           activity引用
+     * @param inputTipsBuilder           匹配参数
+     * @param onAdInputTipsQueryListener 回调监听
+     */
+    public void getInputTipsQuery(FragmentActivity fragmentActivity, InputTipsBuilder inputTipsBuilder, OnADInputTipsQueryListener onAdInputTipsQueryListener) {
+        InputtipsQuery inputTipsQuery = new InputtipsQuery(inputTipsBuilder.getTips(), inputTipsBuilder.getCity());
+        inputTipsQuery.setCityLimit(inputTipsBuilder.isLimit());
+        inputTipsQuery.setLocation(inputTipsBuilder.getLatLonPoint());
+        Inputtips inputTips = new Inputtips(fragmentActivity, inputTipsQuery);
+        inputTips.setInputtipsListener((list, i) -> {
+            if (1000 == i || null == list || 0 == list.size()) {
+                onAdInputTipsQueryListener.onFail("未匹配到查询数据");
+                return;
+            }
+            List<Tip> tipList = new ArrayList<>();
+            for (int j = 0; j < list.size(); j++) {
+                if (TextUtils.isEmpty(list.get(i).getPoiID()) || null == list.get(i).getPoint()) {
+                    return;
+                }
+                tipList.add(list.get(i));
+            }
+            onAdInputTipsQueryListener.onGetInputTipsList(tipList);
+        });
+        inputTips.requestInputtipsAsyn();
+    }
+
+    /**
+     * 获取关键字检索POI
+     * @param context 上下文
+     * @param pageSize
+     * @param page
+     * @param keyWord
+     * @param city
+     */
+    public void getPoiSearch(Context context, int pageSize, int page, String keyWord, String city) {
+        try {
+            PoiSearchV2.Query query = new PoiSearchV2.Query(keyWord, city);
+            query.setPageSize(pageSize);
+            query.setPageNum(page);
+            PoiSearchV2 poiSearchV2 = new PoiSearchV2(context, query);
+            poiSearchV2.setOnPoiSearchListener(new PoiSearchV2.OnPoiSearchListener() {
+                @Override
+                public void onPoiSearched(PoiResultV2 poiResultV2, int i) {
+                    if (1000 == i) {
+                        if (null != poiResultV2 && null != poiResultV2.getPois()) {
+
+                        }
+                    }
+                }
+
+                @Override
+                public void onPoiItemSearched(PoiItemV2 poiItemV2, int i) {
+
+                }
+            });
+            poiSearchV2.searchPOIAsyn();
+        } catch (AMapException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     /**
      * 获取逆地理位置编码
@@ -240,13 +350,11 @@ public class ADLocationUtils {
      * 销毁
      */
     public void destroyLocation() {
-        if (null == aMapLocationClient) {
-            Log.i(TAG, "Initialization is not configured first LocationClient");
-            return;
+        if (aMapLocationClient != null) {
+            aMapLocationClient.stopLocation();
+            aMapLocationClient.onDestroy();
+            aMapLocationClient = null;
         }
-        aMapLocationClient.stopLocation();
-        aMapLocationClient.onDestroy();
-        aMapLocationClient = null;
     }
 
 
@@ -471,24 +579,62 @@ public class ADLocationUtils {
     static double ee = 0.00669342162296594323;
     public final static double x_pi = 3.14159265358979324 * 3000.0 / 180.0;
 
-    public interface OnADLocationUtilsListener {
+    public static class InputTipsBuilder {
+        private String tips;
+        private String city;
+        private LatLonPoint latLonPoint;
+        private boolean isLimit;
 
-        /**
-         * 定位成功
-         *
-         * @param aMapLocation 定位结果
-         */
-        void onLocationSucceed(AMapLocation aMapLocation);
+        public InputTipsBuilder() {
 
-        /**
-         * 定位失败
-         *
-         * @param errorCode 异常code码
-         * @param errorInfo 异常信息
-         */
-        void onLocationError(int errorCode, String errorInfo);
-    }
+        }
 
-    private class ADLocationConfig {
+        public InputTipsBuilder(String tips, String city) {
+            this.tips = tips;
+            this.city = city;
+        }
+
+        public InputTipsBuilder(String tips, String city, LatLonPoint latLonPoint, boolean isLimit) {
+            this.tips = tips;
+            this.city = city;
+            this.latLonPoint = latLonPoint;
+            this.isLimit = isLimit;
+        }
+
+        public String getTips() {
+            return tips;
+        }
+
+        public InputTipsBuilder setTips(String tips) {
+            this.tips = tips;
+            return this;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public InputTipsBuilder setCity(String city) {
+            this.city = city;
+            return this;
+        }
+
+        public LatLonPoint getLatLonPoint() {
+            return latLonPoint;
+        }
+
+        public InputTipsBuilder setLatLonPoint(LatLonPoint latLonPoint) {
+            this.latLonPoint = latLonPoint;
+            return this;
+        }
+
+        public boolean isLimit() {
+            return isLimit;
+        }
+
+        public InputTipsBuilder setLimit(boolean limit) {
+            isLimit = limit;
+            return this;
+        }
     }
 }

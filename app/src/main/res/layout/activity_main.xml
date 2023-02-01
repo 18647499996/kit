@@ -38,5 +38,21 @@
         app:layout_constraintLeft_toRightOf="@id/oss"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/weather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Weather"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/alipay" />
+
+    <Button
+        android:id="@+id/tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tips"
+        app:layout_constraintLeft_toRightOf="@id/alipay"
+        app:layout_constraintTop_toBottomOf="@id/wxpay" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

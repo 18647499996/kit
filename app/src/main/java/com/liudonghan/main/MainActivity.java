@@ -2,13 +2,18 @@ package com.liudonghan.main;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.services.help.Tip;
+import com.amap.api.services.weather.LocalWeatherForecast;
+import com.amap.api.services.weather.LocalWeatherLive;
+import com.amap.api.services.weather.WeatherSearchQuery;
 import com.liudonghan.kit.location.ADLocationUtils;
+import com.liudonghan.kit.location.listener.OnADInputTipsQueryListener;
+import com.liudonghan.kit.location.listener.OnADLocationUtilsListener;
+import com.liudonghan.kit.location.listener.OnADWeatherSearchListener;
 import com.liudonghan.kit.oss.ADCosServiceFactory;
 import com.liudonghan.kit.pay.ADAliPayUtils;
 import com.liudonghan.kit.pay.ADWxPayUtils;
@@ -18,7 +23,9 @@ import com.liudonghan.multi_image.permission.Permission;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnPayResultListener, ADCosServiceFactory.OnUploadListener, ADLocationUtils.OnADLocationUtilsListener {
+public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnPayResultListener, ADCosServiceFactory.OnUploadListener, OnADLocationUtilsListener, OnADWeatherSearchListener {
+
+    private static final String TAG = "Mac_Liu";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +44,10 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
                     @Override
                     public void hasPermission(List<String> granted, boolean isAll) {
                         if (isAll) {
-                            ADLocationUtils.getInstance().registerLocationListener(MainActivity.this).startLocation();
+                            ADLocationUtils.getInstance()
+                                    .getLocation(MainActivity.this)
+                                    .registerLocationListener(MainActivity.this)
+                                    .startLocation();
                         }
                     }
 
@@ -46,8 +56,28 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
 
                     }
                 }));
+        findViewById(R.id.weather).setOnClickListener(view -> ADLocationUtils.getInstance().getCityWeather(MainActivity.this, "北京", WeatherSearchQuery.WEATHER_TYPE_LIVE, MainActivity.this));
+        findViewById(R.id.tips).setOnClickListener(view -> ADLocationUtils.getInstance().getInputTipsQuery(MainActivity.this,
+                new ADLocationUtils.InputTipsBuilder()
+                        .setTips("潘家园")
+                        .setCity("北京")
+                        .setLimit(true), new OnADInputTipsQueryListener() {
+                    @Override
+                    public void onGetInputTipsList(List<Tip> tipList) {
 
+                    }
 
+                    @Override
+                    public void onFail(String errorMsg) {
+
+                    }
+                }));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ADLocationUtils.getInstance().destroyLocation();
     }
 
     @Override
@@ -92,6 +122,21 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
 
     @Override
     public void onLocationError(int errorCode, String errorInfo) {
-        Log.d("onLocationError：", errorCode + " --------- " + errorInfo);
+        Log.i(TAG, errorCode + " --------- " + errorInfo);
+    }
+
+    @Override
+    public void onWeatherLiveSearched(LocalWeatherLive localWeatherLive) {
+        Log.i(TAG, "天气实况： " + localWeatherLive.getWeather());
+    }
+
+    @Override
+    public void onWeatherForecastSearched(LocalWeatherForecast localWeatherForecast) {
+        Log.i(TAG, "天气预报：" + localWeatherForecast.getWeatherForecast().toString());
+    }
+
+    @Override
+    public void onFail(int errorCode, String errorMsg) {
+
     }
 }
