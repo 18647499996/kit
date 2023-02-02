@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItemV2;
+import com.amap.api.services.geocoder.GeocodeAddress;
 import com.amap.api.services.geocoder.RegeocodeAddress;
 import com.amap.api.services.help.Tip;
 import com.amap.api.services.poisearch.PoiSearchV2;
@@ -74,6 +75,11 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
         ADLocationUtils.getInstance().getGeocodeSearch(this, 0, 0, new OnADGeocodeSearchListener() {
             @Override
             public void onRegSearched(RegeocodeAddress regeocodeAddress) {
+
+            }
+
+            @Override
+            public void onGeocodeSearched(List<GeocodeAddress> geocodeAddressList) {
 
             }
 
