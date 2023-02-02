@@ -31,7 +31,7 @@ import com.liudonghan.multi_image.permission.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnPayResultListener, ADCosServiceFactory.OnUploadListener, OnADLocationUtilsListener, OnADWeatherSearchListener, OnADInputTipsQueryListener, OnADPoiSearchListener {
+public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnPayResultListener, ADCosServiceFactory.OnUploadListener, OnADLocationUtilsListener, OnADWeatherSearchListener, OnADInputTipsQueryListener, OnADPoiSearchListener, OnADGeocodeSearchListener {
 
     private static final String TAG = "Mac_Liu";
 
@@ -72,22 +72,7 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
                         .setLimit(true), this));
         findViewById(R.id.keyword).setOnClickListener(view -> ADLocationUtils.getInstance().getPoiSearch(this, new ADLocationUtils.SearchBuilder("潘家园", "","北京").setPage(1).setLimit(20), this));
         findViewById(R.id.bound).setOnClickListener(view -> ADLocationUtils.getInstance().getPoiSearch(this,new ADLocationUtils.SearchBuilder(),new PoiSearchV2.SearchBound(new LatLonPoint(39.941711, 116.382248),200),this));
-        ADLocationUtils.getInstance().getGeocodeSearch(this, 0, 0, new OnADGeocodeSearchListener() {
-            @Override
-            public void onRegSearched(RegeocodeAddress regeocodeAddress) {
-
-            }
-
-            @Override
-            public void onGeocodeSearched(List<GeocodeAddress> geocodeAddressList) {
-
-            }
-
-            @Override
-            public void onFail(int errorCode, String errorMsg) {
-
-            }
-        });
+        ADLocationUtils.getInstance().getGeocodeSearch(this, 39.941711, 116.382248, this);
     }
 
     @Override
@@ -183,5 +168,15 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
     @Override
     public void onPoiItemSearched(PoiItemV2 poiItem) {
         Log.i(TAG,"poi检索条目：" + poiItem.toString());
+    }
+
+    @Override
+    public void onRegSearched(RegeocodeAddress regeocodeAddress) {
+        Log.i(TAG,"逆地理位置编码：" + regeocodeAddress.getFormatAddress());
+    }
+
+    @Override
+    public void onGeocodeSearched(List<GeocodeAddress> geocodeAddressList) {
+
     }
 }
