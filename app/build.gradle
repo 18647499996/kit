@@ -11,7 +11,7 @@ android {
         versionCode VERSAION_CODE.toInteger()
         versionName VERSAION_NAME.toString()
         manifestPlaceholders = [
-                MAP_KEY : '3a83d6e0dc3928e55c44861ee0fc9161'
+                MAP_KEY : '8810842a68872e87812bce73f44dd938'
         ]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

@@ -9,7 +9,7 @@ import com.amap.api.services.weather.LocalWeatherLive;
  * @author Created by: Li_Min
  * Time:2/1/23
  */
-public interface OnADWeatherSearchListener {
+public interface OnADWeatherSearchListener extends OnADListener {
 
     /**
      * 实况天气结果
@@ -24,14 +24,4 @@ public interface OnADWeatherSearchListener {
      * @param localWeatherForecast 预报数据
      */
     void onWeatherForecastSearched(LocalWeatherForecast localWeatherForecast);
-
-    /**
-     * 异常数据
-     *
-     * @param errorCode 异常码
-     * @param errorMsg  异常信息
-     */
-    void onFail(int errorCode, String errorMsg);
-
-
 }

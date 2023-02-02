@@ -8,7 +8,7 @@ import com.amap.api.location.AMapLocation;
  * @author Created by: Li_Min
  * Time:2/1/23
  */
-public interface OnADLocationUtilsListener {
+public interface OnADLocationUtilsListener extends OnADListener {
     /**
      * 定位成功
      *

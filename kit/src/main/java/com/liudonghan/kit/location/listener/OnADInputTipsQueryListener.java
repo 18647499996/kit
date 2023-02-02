@@ -10,7 +10,7 @@ import java.util.List;
  * @author Created by: Li_Min
  * Time:2/1/23
  */
-public interface OnADInputTipsQueryListener {
+public interface OnADInputTipsQueryListener extends OnADListener {
 
     /**
      * 获取自动匹配地址信息
@@ -18,11 +18,4 @@ public interface OnADInputTipsQueryListener {
      * @param tipList 匹配列表
      */
     void onGetInputTipsList(List<Tip> tipList);
-
-    /**
-     * 自动匹配异常
-     *
-     * @param errorMsg 异常描述
-     */
-    void onFail(String errorMsg);
 }

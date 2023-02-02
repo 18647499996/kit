@@ -18,7 +18,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         ADCosServiceFactory.getInstance().setConfig("AKID5zd06vTlnX2GDtJTMyIM9esqWv2sSlnY", "VjgMltkKjsoTrzqPhjUyA6l9F4cttc4F", "shops-1307611133", "ap-beijing");
-        ADLocationUtils.getInstance().init(this, "", new AMapLocationClientOption()
+        ADLocationUtils.getInstance().init(this,  new AMapLocationClientOption()
                 .setGpsFirst(true)
                 .setInterval(30000)
                 .setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy)

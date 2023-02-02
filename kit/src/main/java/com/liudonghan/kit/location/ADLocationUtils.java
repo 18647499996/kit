@@ -1,18 +1,11 @@
 package com.liudonghan.kit.location;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Criteria;
-import android.location.Geocoder;
-import android.location.Location;
 import android.location.LocationManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.amap.api.location.AMapLocationClient;
@@ -21,8 +14,11 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItemV2;
+import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeAddress;
 import com.amap.api.services.geocoder.RegeocodeQuery;
+import com.amap.api.services.geocoder.RegeocodeResult;
 import com.amap.api.services.help.Inputtips;
 import com.amap.api.services.help.InputtipsQuery;
 import com.amap.api.services.help.Tip;
@@ -32,15 +28,14 @@ import com.amap.api.services.weather.LocalWeatherForecastResult;
 import com.amap.api.services.weather.LocalWeatherLiveResult;
 import com.amap.api.services.weather.WeatherSearch;
 import com.amap.api.services.weather.WeatherSearchQuery;
+import com.liudonghan.kit.location.listener.OnADGeocodeSearchListener;
 import com.liudonghan.kit.location.listener.OnADInputTipsQueryListener;
 import com.liudonghan.kit.location.listener.OnADLocationUtilsListener;
+import com.liudonghan.kit.location.listener.OnADPoiSearchListener;
 import com.liudonghan.kit.location.listener.OnADWeatherSearchListener;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
 
 /**
  * Description：定位工具类
@@ -126,28 +121,17 @@ public class ADLocationUtils {
      * @param context 上下文
      */
     public void init(Context context) {
-        init(context, "", new AMapLocationClientOption());
-    }
-
-    /**
-     * 初始化定位
-     *
-     * @param context 上下文
-     */
-    public void init(Context context, String appKey) {
-        init(context, appKey, new AMapLocationClientOption());
+        init(context, new AMapLocationClientOption());
     }
 
     /**
      * 初始化定位
      *
      * @param context                  上下文
-     * @param appKey                   应用Key
      * @param aMapLocationClientOption 定位参数配置
      */
-    public void init(Context context, String appKey, AMapLocationClientOption aMapLocationClientOption) {
+    public void init(Context context, AMapLocationClientOption aMapLocationClientOption) {
         try {
-            AMapLocationClient.setApiKey(appKey);
             AMapLocationClient.updatePrivacyAgree(context, true);
             AMapLocationClient.updatePrivacyShow(context, true, true);
             this.aMapLocationClientOption = aMapLocationClientOption;
@@ -245,22 +229,22 @@ public class ADLocationUtils {
      * @param inputTipsBuilder           匹配参数
      * @param onAdInputTipsQueryListener 回调监听
      */
-    public void getInputTipsQuery(FragmentActivity fragmentActivity, InputTipsBuilder inputTipsBuilder, OnADInputTipsQueryListener onAdInputTipsQueryListener) {
+    public void getInputTipsQuery(FragmentActivity fragmentActivity, Builder inputTipsBuilder, OnADInputTipsQueryListener onAdInputTipsQueryListener) {
         InputtipsQuery inputTipsQuery = new InputtipsQuery(inputTipsBuilder.getTips(), inputTipsBuilder.getCity());
         inputTipsQuery.setCityLimit(inputTipsBuilder.isLimit());
         inputTipsQuery.setLocation(inputTipsBuilder.getLatLonPoint());
         Inputtips inputTips = new Inputtips(fragmentActivity, inputTipsQuery);
         inputTips.setInputtipsListener((list, i) -> {
-            if (1000 == i || null == list || 0 == list.size()) {
-                onAdInputTipsQueryListener.onFail("未匹配到查询数据");
+            if (1000 != i || null == list || 0 == list.size()) {
+                onAdInputTipsQueryListener.onFail(i, "未匹配到查询数据");
                 return;
             }
             List<Tip> tipList = new ArrayList<>();
             for (int j = 0; j < list.size(); j++) {
-                if (TextUtils.isEmpty(list.get(i).getPoiID()) || null == list.get(i).getPoint()) {
+                if (TextUtils.isEmpty(list.get(j).getPoiID()) || null == list.get(j).getPoint()) {
                     return;
                 }
-                tipList.add(list.get(i));
+                tipList.add(list.get(j));
             }
             onAdInputTipsQueryListener.onGetInputTipsList(tipList);
         });
@@ -268,60 +252,97 @@ public class ADLocationUtils {
     }
 
     /**
-     * 获取关键字检索POI
-     * @param context 上下文
-     * @param pageSize
-     * @param page
-     * @param keyWord
-     * @param city
+     * 关键字检索POI
+     *
+     * @param context               上下文
+     * @param query                 查询参数
+     * @param onADPoiSearchListener 检索回调接口
      */
-    public void getPoiSearch(Context context, int pageSize, int page, String keyWord, String city) {
+    public void getPoiSearch(Context context, SearchBuilder query, OnADPoiSearchListener onADPoiSearchListener) {
+        getPoiSearch(context, query, null, onADPoiSearchListener);
+
+    }
+
+    /**
+     * 获取周边检索
+     *
+     * @param context               上下文
+     * @param query                 检索条件参数
+     * @param searchBound           周边检索参数
+     * @param onADPoiSearchListener 检索回调接口
+     */
+    public void getPoiSearch(Context context, SearchBuilder query, PoiSearchV2.SearchBound searchBound, OnADPoiSearchListener onADPoiSearchListener) {
         try {
-            PoiSearchV2.Query query = new PoiSearchV2.Query(keyWord, city);
-            query.setPageSize(pageSize);
-            query.setPageNum(page);
             PoiSearchV2 poiSearchV2 = new PoiSearchV2(context, query);
+            poiSearchV2.setBound(searchBound);
             poiSearchV2.setOnPoiSearchListener(new PoiSearchV2.OnPoiSearchListener() {
                 @Override
                 public void onPoiSearched(PoiResultV2 poiResultV2, int i) {
                     if (1000 == i) {
                         if (null != poiResultV2 && null != poiResultV2.getPois()) {
-
+                            onADPoiSearchListener.onPoiSearched(poiResultV2.getPois());
+                        } else {
+                            onADPoiSearchListener.onFail(9999, "未检索到Poi数据");
                         }
+                    } else {
+                        onADPoiSearchListener.onFail(i, "未检索到Poi数据");
                     }
                 }
 
                 @Override
                 public void onPoiItemSearched(PoiItemV2 poiItemV2, int i) {
-
+                    onADPoiSearchListener.onPoiItemSearched(poiItemV2);
                 }
             });
             poiSearchV2.searchPOIAsyn();
         } catch (AMapException e) {
             e.printStackTrace();
         }
-
     }
 
     /**
-     * 获取逆地理位置编码
+     * 获取逆地理位置编码（ 经纬度坐标转地址信息 ）
      *
-     * @param context                 上下文
-     * @param latitude                经度
-     * @param longitude               纬度
-     * @param onGeocodeSearchListener 回调监听器
+     * @param context                   上下文
+     * @param latitude                  经度
+     * @param longitude                 纬度
+     * @param onADGeocodeSearchListener 回调监听器
      */
-    public void getGeocodeSearch(Context context, double latitude, double longitude, GeocodeSearch.OnGeocodeSearchListener onGeocodeSearchListener) {
+    public void  getGeocodeSearch(Context context, double latitude, double longitude, OnADGeocodeSearchListener onADGeocodeSearchListener) {
         GeocodeSearch geocodeSearch;
         try {
             geocodeSearch = new GeocodeSearch(context);
             geocodeSearch.getFromLocationAsyn(new RegeocodeQuery(new LatLonPoint(latitude, longitude), 200, GeocodeSearch.AMAP));
-            geocodeSearch.setOnGeocodeSearchListener(onGeocodeSearchListener);
+            geocodeSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener() {
+                @Override
+                public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
+                    if (i == 1000) {
+                        if (null != regeocodeResult && null != regeocodeResult.getRegeocodeAddress()){
+                            onADGeocodeSearchListener.onRegSearched(regeocodeResult.getRegeocodeAddress());
+                        }else {
+                            onADGeocodeSearchListener.onFail(9999,"未获取到地址信息");
+                        }
+                    }else{
+                        onADGeocodeSearchListener.onFail(i,"获取定位地址信息异常");
+                    }
+                }
+
+                @Override
+                public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
+                    if (i == 1000){
+                        if (null != geocodeResult && null != geocodeResult.getGeocodeAddressList()){
+                            onADGeocodeSearchListener.onGeocodeSearched(geocodeResult.getGeocodeAddressList());
+                        }else{
+                            onADGeocodeSearchListener.onFail(9999,"未获取到地址信息");
+                        }
+                    }else {
+                        onADGeocodeSearchListener.onFail(i,"获取定位地址信息异常");
+                    }
+                }
+            });
         } catch (AMapException e) {
             e.printStackTrace();
         }
-
-
     }
 
     /**
@@ -441,160 +462,22 @@ public class ADLocationUtils {
         return new LatLng(newlat, newlng);
     }
 
-
-    public void originLocation(Context context) {
-        //获取定位服务
-        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        //检查定位是否被打开
-        boolean gpsIsOpen = Objects.requireNonNull(locationManager).isProviderEnabled(LocationManager.GPS_PROVIDER);
-        Log.d("Get Origin Location：", "定位是否打开：" + gpsIsOpen);
-        // 为获取地理位置信息时设置查询条件 是按GPS定位还是network定位
-        String bestProvider = getProvider();
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        Location location = locationManager.getLastKnownLocation(bestProvider);
-        String mLongitude = String.valueOf(Objects.requireNonNull(location).getLongitude());
-        String mLatitude = String.valueOf(location.getLatitude());
-        Log.d("Get Origin Location：", "经纬度：" + mLongitude + " ====== " + mLatitude);
-        Log.d("Get Origin Location：", "地址：" + getLocationAddress(location, context));
-        double[] doubleArray = wgs2bd(location.getLatitude(), location.getLongitude());
-        Log.d("Get Origin Location：", "百度经纬度：" + doubleArray[0] + "  ==== " + doubleArray[1]);
-    }
-
-    /**
-     * 定位查询条件
-     * 返回查询条件 ，获取目前设备状态下，最适合的定位方式
-     */
-    private String getProvider() {
-        // 构建位置查询条件
-        Criteria criteria = new Criteria();
-        // 设置定位精确度 Criteria.ACCURACY_COARSE比较粗略，Criteria.ACCURACY_FINE则比较精细
-        //Criteria.ACCURACY_FINE,当使用该值时，在建筑物当中，可能定位不了,建议在对定位要求并不是很高的时候用Criteria.ACCURACY_COARSE，避免定位失败
-        // 查询精度：高
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        // 设置是否要求速度
-        criteria.setSpeedRequired(false);
-        // 是否查询海拨：否
-        criteria.setAltitudeRequired(false);
-        // 是否查询方位角 : 否
-        criteria.setBearingRequired(false);
-        // 是否允许付费：是
-        criteria.setCostAllowed(false);
-        // 电量要求：低
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-        // 返回最合适的符合条件的provider，第2个参数为true说明 , 如果只有一个provider是有效的,则返回当前provider
-        return locationManager.getBestProvider(criteria, true);
-    }
-
-    /**
-     * 将经纬度转换成中文地址
-     *
-     * @param location 定位信息
-     * @return String
-     */
-    private String getLocationAddress(Location location, Context context) {
-        String add;
-        Geocoder geoCoder = new Geocoder(context, Locale.CHINESE);
-        try {
-            List<Address> addresses = geoCoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            Address address = addresses.get(0);
-            Log.d("getLocationAddress：", address.toString());
-            // Address[addressLines=[0:"中国",1:"北京市海淀区",2:"华奥饭店公司写字间中关村创业大街"]latitude=39.980973,hasLongitude=true,longitude=116.301712]
-            int maxLine = address.getMaxAddressLineIndex();
-            if (maxLine >= 2) {
-                add = address.getAddressLine(1) + address.getAddressLine(2);
-            } else {
-                add = address.getAddressLine(1);
-            }
-        } catch (IOException e) {
-            add = "";
-            e.printStackTrace();
-        }
-        return add;
-    }
-
-    public static double[] wgs2bd(double lat, double lon) {
-        double[] wgs2gcj = wgs2gcj(lat, lon);
-        return gcj2bd(wgs2gcj[0], wgs2gcj[1]);
-    }
-
-    public static double[] gcj2bd(double lat, double lon) {
-        double z = Math.sqrt(lon * lon + lat * lat) + 0.00002 * Math.sin(lat * x_pi);
-        double theta = Math.atan2(lat, lon) + 0.000003 * Math.cos(lon * x_pi);
-        double bd_lon = z * Math.cos(theta) + 0.0065;
-        double bd_lat = z * Math.sin(theta) + 0.006;
-        return new double[]{bd_lat, bd_lon};
-    }
-
-    public static double[] bd2gcj(double lat, double lon) {
-        double x = lon - 0.0065, y = lat - 0.006;
-        double z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_pi);
-        double theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * x_pi);
-        double gg_lon = z * Math.cos(theta);
-        double gg_lat = z * Math.sin(theta);
-        return new double[]{gg_lat, gg_lon};
-    }
-
-    public static double[] wgs2gcj(double lat, double lon) {
-        double dLat = transformLat(lon - 105.0, lat - 35.0);
-        double dLon = transformLon(lon - 105.0, lat - 35.0);
-        double radLat = lat / 180.0 * pi;
-        double magic = Math.sin(radLat);
-        magic = 1 - ee * magic * magic;
-        double sqrtMagic = Math.sqrt(magic);
-        dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * pi);
-        dLon = (dLon * 180.0) / (a / sqrtMagic * Math.cos(radLat) * pi);
-        double mgLat = lat + dLat;
-        double mgLon = lon + dLon;
-        return new double[]{mgLat, mgLon};
-    }
-
-    private static double transformLat(double lat, double lon) {
-        double ret = -100.0 + 2.0 * lat + 3.0 * lon + 0.2 * lon * lon + 0.1 * lat * lon + 0.2 * Math.sqrt(Math.abs(lat));
-        ret += (20.0 * Math.sin(6.0 * lat * pi) + 20.0 * Math.sin(2.0 * lat * pi)) * 2.0 / 3.0;
-        ret += (20.0 * Math.sin(lon * pi) + 40.0 * Math.sin(lon / 3.0 * pi)) * 2.0 / 3.0;
-        ret += (160.0 * Math.sin(lon / 12.0 * pi) + 320 * Math.sin(lon * pi / 30.0)) * 2.0 / 3.0;
-        return ret;
-    }
-
-    private static double transformLon(double lat, double lon) {
-        double ret = 300.0 + lat + 2.0 * lon + 0.1 * lat * lat + 0.1 * lat * lon + 0.1 * Math.sqrt(Math.abs(lat));
-        ret += (20.0 * Math.sin(6.0 * lat * pi) + 20.0 * Math.sin(2.0 * lat * pi)) * 2.0 / 3.0;
-        ret += (20.0 * Math.sin(lat * pi) + 40.0 * Math.sin(lat / 3.0 * pi)) * 2.0 / 3.0;
-        ret += (150.0 * Math.sin(lat / 12.0 * pi) + 300.0 * Math.sin(lat / 30.0 * pi)) * 2.0 / 3.0;
-        return ret;
-
-    }
-
-    static double pi = 3.14159265358979324;
-    static double a = 6378245.0;
-    static double ee = 0.00669342162296594323;
-    public final static double x_pi = 3.14159265358979324 * 3000.0 / 180.0;
-
-    public static class InputTipsBuilder {
+    public static class Builder {
         private String tips;
         private String city;
         private LatLonPoint latLonPoint;
         private boolean isLimit;
 
-        public InputTipsBuilder() {
+        public Builder() {
 
         }
 
-        public InputTipsBuilder(String tips, String city) {
+        public Builder(String tips, String city) {
             this.tips = tips;
             this.city = city;
         }
 
-        public InputTipsBuilder(String tips, String city, LatLonPoint latLonPoint, boolean isLimit) {
+        public Builder(String tips, String city, LatLonPoint latLonPoint, boolean isLimit) {
             this.tips = tips;
             this.city = city;
             this.latLonPoint = latLonPoint;
@@ -605,7 +488,7 @@ public class ADLocationUtils {
             return tips;
         }
 
-        public InputTipsBuilder setTips(String tips) {
+        public Builder setTips(String tips) {
             this.tips = tips;
             return this;
         }
@@ -614,7 +497,7 @@ public class ADLocationUtils {
             return city;
         }
 
-        public InputTipsBuilder setCity(String city) {
+        public Builder setCity(String city) {
             this.city = city;
             return this;
         }
@@ -623,7 +506,7 @@ public class ADLocationUtils {
             return latLonPoint;
         }
 
-        public InputTipsBuilder setLatLonPoint(LatLonPoint latLonPoint) {
+        public Builder setLatLonPoint(LatLonPoint latLonPoint) {
             this.latLonPoint = latLonPoint;
             return this;
         }
@@ -632,8 +515,45 @@ public class ADLocationUtils {
             return isLimit;
         }
 
-        public InputTipsBuilder setLimit(boolean limit) {
+        public Builder setLimit(boolean limit) {
             isLimit = limit;
+            return this;
+        }
+    }
+
+    public static class SearchBuilder extends PoiSearchV2.Query {
+
+        private boolean isLimit;
+
+        public SearchBuilder() {
+            super("", "", "");
+        }
+
+        public SearchBuilder(String keyWord, String poiCode) {
+            super(keyWord, poiCode);
+        }
+
+        public SearchBuilder(String keyWord, String poiCode, String city) {
+            super(keyWord, poiCode, city);
+        }
+
+        public SearchBuilder setPage(int pageNum) {
+            setPageNum(pageNum);
+            return this;
+        }
+
+        public SearchBuilder setLimit(int limit) {
+            setPageSize(limit);
+            return this;
+        }
+
+        public SearchBuilder setLimit(boolean isLimit) {
+            setCityLimit(isLimit);
+            return this;
+        }
+
+        public SearchBuilder setSort(boolean distanceSort) {
+            setDistanceSort(distanceSort);
             return this;
         }
     }
