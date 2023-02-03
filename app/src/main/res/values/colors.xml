@@ -3,4 +3,8 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+
+    <color name="dkplayer_theme_color">#FF7E04</color>
+    <color name="dkplayer_theme_color_translucent">#94000000</color>
+    <color name="dkplayer_background_color">#96000000</color>
 </resources>

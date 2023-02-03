@@ -60,5 +60,16 @@ dependencies {
     api 'com.amap.api:search:9.5.0'
     // 高德地图 or 定位
     api 'com.amap.api:3dmap:9.6.0'
+    // 必选，内部默认使用系统MediaPlayer进行解码
+    api 'xyz.doikki.android.dkplayer:dkplayer-java:3.3.7'
+    // 可选，包含StandardVideoController的实现
+    api 'xyz.doikki.android.dkplayer:dkplayer-ui:3.3.7'
+    // 可选，使用exoPlayer进行解码
+    api 'xyz.doikki.android.dkplayer:player-exo:3.3.7'
+    // 可选，使用ijkPlayer进行解码
+    api 'xyz.doikki.android.dkplayer:player-ijk:3.3.7'
+    // 可选，如需要缓存或者抖音预加载功能请引入此库
+    api 'xyz.doikki.android.dkplayer:videocache:3.3.7'
+
 
 }

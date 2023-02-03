@@ -16,7 +16,6 @@ import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItemV2;
 import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
-import com.amap.api.services.geocoder.RegeocodeAddress;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
 import com.amap.api.services.help.Inputtips;
@@ -75,25 +74,25 @@ import java.util.List;
  * @author Created by: Li_Min
  * Time:2019/11/29
  */
-public class ADLocationUtils {
+public class ADLocationManager {
 
     private static final String TAG = "Mac_Liu";
 
-    private static volatile ADLocationUtils instance = null;
+    private static volatile ADLocationManager instance = null;
     private AMapLocationClient aMapLocationClient;
     private LocationManager locationManager;
     private AMapLocationClientOption aMapLocationClientOption;
 
-    private ADLocationUtils() {
+    private ADLocationManager() {
     }
 
-    public static ADLocationUtils getInstance() {
+    public static ADLocationManager getInstance() {
         //single chcekout
         if (null == instance) {
-            synchronized (ADLocationUtils.class) {
+            synchronized (ADLocationManager.class) {
                 // double checkout
                 if (null == instance) {
-                    instance = new ADLocationUtils();
+                    instance = new ADLocationManager();
                 }
             }
         }
@@ -106,7 +105,7 @@ public class ADLocationUtils {
      * @param aMapLocationClientOption 定位配置参数
      * @return ADLocationUtils
      */
-    public ADLocationUtils setConfig(AMapLocationClientOption aMapLocationClientOption) {
+    public ADLocationManager setConfig(AMapLocationClientOption aMapLocationClientOption) {
         if (null == aMapLocationClient) {
             Log.i(TAG, "Initialization is not configured first LocationClient");
             return this;
@@ -140,7 +139,7 @@ public class ADLocationUtils {
         }
     }
 
-    public ADLocationUtils getLocation(Context context) {
+    public ADLocationManager getLocation(Context context) {
         try {
             aMapLocationClient = new AMapLocationClient(context);
             aMapLocationClient.setLocationOption(aMapLocationClientOption);
@@ -155,7 +154,7 @@ public class ADLocationUtils {
      *
      * @param onADLocationUtilsListener 监听回调
      */
-    public ADLocationUtils registerLocationListener(OnADLocationUtilsListener onADLocationUtilsListener) {
+    public ADLocationManager registerLocationListener(OnADLocationUtilsListener onADLocationUtilsListener) {
         if (null == aMapLocationClient) {
             Log.i(TAG, "Initialization is not configured first LocationClient");
             return this;

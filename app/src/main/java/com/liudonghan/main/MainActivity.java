@@ -15,13 +15,14 @@ import com.amap.api.services.poisearch.PoiSearchV2;
 import com.amap.api.services.weather.LocalWeatherForecast;
 import com.amap.api.services.weather.LocalWeatherLive;
 import com.amap.api.services.weather.WeatherSearchQuery;
-import com.liudonghan.kit.location.ADLocationUtils;
+import com.google.android.exoplayer2.util.Util;
+import com.liudonghan.kit.location.ADLocationManager;
 import com.liudonghan.kit.location.listener.OnADGeocodeSearchListener;
 import com.liudonghan.kit.location.listener.OnADInputTipsQueryListener;
 import com.liudonghan.kit.location.listener.OnADLocationUtilsListener;
 import com.liudonghan.kit.location.listener.OnADPoiSearchListener;
 import com.liudonghan.kit.location.listener.OnADWeatherSearchListener;
-import com.liudonghan.kit.oss.ADCosServiceFactory;
+import com.liudonghan.kit.oss.ADCosServiceManager;
 import com.liudonghan.kit.pay.ADAliPayUtils;
 import com.liudonghan.kit.pay.ADWxPayUtils;
 import com.liudonghan.multi_image.permission.ADPermission;
@@ -31,7 +32,10 @@ import com.liudonghan.multi_image.permission.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnPayResultListener, ADCosServiceFactory.OnUploadListener, OnADLocationUtilsListener, OnADWeatherSearchListener, OnADInputTipsQueryListener, OnADPoiSearchListener, OnADGeocodeSearchListener {
+import xyz.doikki.videocontroller.StandardVideoController;
+import xyz.doikki.videoplayer.player.VideoView;
+
+public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnPayResultListener, ADCosServiceManager.OnUploadListener, OnADLocationUtilsListener, OnADWeatherSearchListener, OnADInputTipsQueryListener, OnADPoiSearchListener, OnADGeocodeSearchListener {
 
     private static final String TAG = "Mac_Liu";
 
@@ -42,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
         ADAliPayUtils.getInstance().setOnPayResultListener(this);
         findViewById(R.id.alipay).setOnClickListener(view -> ADAliPayUtils.getInstance().pay(MainActivity.this, ""));
         findViewById(R.id.wxpay).setOnClickListener(view -> ADWxPayUtils.getInstance().pay(MainActivity.this, "", "", "", "", "", ""));
-        findViewById(R.id.oss).setOnClickListener(view -> ADCosServiceFactory.getInstance().uploadFile(MainActivity.this, "Android/Image/Portrait/" + System.currentTimeMillis(), "/storage/emulated/0/DCIM/Screenshots/Screenshot_2023-01-30-18-12-59-54_92b64b2a7aa6eb3771ed6e18d0029815.jpg", MainActivity.this));
+        findViewById(R.id.oss).setOnClickListener(view -> ADCosServiceManager.getInstance().uploadFile(MainActivity.this, "Android/Image/Portrait/" + System.currentTimeMillis(), "/storage/emulated/0/DCIM/Screenshots/Screenshot_2023-01-30-18-12-59-54_92b64b2a7aa6eb3771ed6e18d0029815.jpg", MainActivity.this));
         findViewById(R.id.location).setOnClickListener(view -> ADPermission.with(MainActivity.this)
                 .permission(Permission.ACCESS_COARSE_LOCATION)
                 .permission(Permission.ACCESS_FINE_LOCATION)
@@ -52,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
                     @Override
                     public void hasPermission(List<String> granted, boolean isAll) {
                         if (isAll) {
-                            ADLocationUtils.getInstance()
+                            ADLocationManager.getInstance()
                                     .getLocation(MainActivity.this)
                                     .registerLocationListener(MainActivity.this)
                                     .startLocation();
@@ -64,21 +68,29 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
 
                     }
                 }));
-        findViewById(R.id.weather).setOnClickListener(view -> ADLocationUtils.getInstance().getCityWeather(this, "北京", WeatherSearchQuery.WEATHER_TYPE_LIVE, this));
-        findViewById(R.id.tips).setOnClickListener(view -> ADLocationUtils.getInstance().getInputTipsQuery(this,
-                new ADLocationUtils.Builder()
+        findViewById(R.id.weather).setOnClickListener(view -> ADLocationManager.getInstance().getCityWeather(this, "北京", WeatherSearchQuery.WEATHER_TYPE_LIVE, this));
+        findViewById(R.id.tips).setOnClickListener(view -> ADLocationManager.getInstance().getInputTipsQuery(this,
+                new ADLocationManager.Builder()
                         .setTips("潘家园")
                         .setCity("北京")
                         .setLimit(true), this));
-        findViewById(R.id.keyword).setOnClickListener(view -> ADLocationUtils.getInstance().getPoiSearch(this, new ADLocationUtils.SearchBuilder("潘家园", "","北京").setPage(1).setLimit(20), this));
-        findViewById(R.id.bound).setOnClickListener(view -> ADLocationUtils.getInstance().getPoiSearch(this,new ADLocationUtils.SearchBuilder(),new PoiSearchV2.SearchBound(new LatLonPoint(39.941711, 116.382248),200),this));
-        ADLocationUtils.getInstance().getGeocodeSearch(this, 39.941711, 116.382248, this);
+        findViewById(R.id.keyword).setOnClickListener(view -> ADLocationManager.getInstance().getPoiSearch(this, new ADLocationManager.SearchBuilder("潘家园", "","北京").setPage(1).setLimit(20), this));
+        findViewById(R.id.bound).setOnClickListener(view -> ADLocationManager.getInstance().getPoiSearch(this,new ADLocationManager.SearchBuilder(),new PoiSearchV2.SearchBound(new LatLonPoint(39.941711, 116.382248),200),this));
+        ADLocationManager.getInstance().getGeocodeSearch(this, 39.941711, 116.382248, this);
+        VideoView ijkVideoView = findViewById(R.id.ijk);
+        ijkVideoView.setUrl("https://shops-1307611133.cos.ap-beijing.myqcloud.com/Android/Video/Evidence/video_20230202180456792.mp4");
+        StandardVideoController standardVideoController = new StandardVideoController(this);
+        ijkVideoView.setVideoController(standardVideoController);
+        standardVideoController.addDefaultControlComponent("标题",false);
+        standardVideoController.setPlayerState(ijkVideoView.getCurrentPlayerState());
+        standardVideoController.setPlayState(ijkVideoView.getCurrentPlayState());
+        ijkVideoView.start();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ADLocationUtils.getInstance().destroyLocation();
+        ADLocationManager.getInstance().destroyLocation();
     }
 
     @Override

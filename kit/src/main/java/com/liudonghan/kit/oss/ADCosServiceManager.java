@@ -29,7 +29,7 @@ import java.util.Objects;
  * @author Created by: Li_Min
  * Time:
  */
-public class ADCosServiceFactory {
+public class ADCosServiceManager {
 
     public String DEFAULT_REGION = "";
 
@@ -42,18 +42,18 @@ public class ADCosServiceFactory {
     public static Map<String, CosXmlService> cosXmlServiceMap = new HashMap<>();
 
 
-    private static volatile ADCosServiceFactory instance = null;
+    private static volatile ADCosServiceManager instance = null;
 
-    private ADCosServiceFactory() {
+    private ADCosServiceManager() {
     }
 
-    public static ADCosServiceFactory getInstance() {
+    public static ADCosServiceManager getInstance() {
         //single chcekout
         if (null == instance) {
-            synchronized (ADCosServiceFactory.class) {
+            synchronized (ADCosServiceManager.class) {
                 // double checkout
                 if (null == instance) {
-                    instance = new ADCosServiceFactory();
+                    instance = new ADCosServiceManager();
                 }
             }
         }

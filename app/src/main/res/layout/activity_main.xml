@@ -70,5 +70,12 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/weather" />
 
+    <xyz.doikki.videoplayer.player.VideoView
+        android:id="@+id/ijk"
+        android:layout_width="350dp"
+        android:layout_height="200dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bound" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

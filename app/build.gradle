@@ -14,7 +14,7 @@ android {
                 MAP_KEY : '8810842a68872e87812bce73f44dd938'
         ]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
+        multiDexEnabled true
 
     }
     signingConfigs {
