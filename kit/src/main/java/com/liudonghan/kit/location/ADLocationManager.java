@@ -6,8 +6,6 @@ import android.location.LocationManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import androidx.fragment.app.FragmentActivity;
-
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.maps.model.LatLng;
@@ -224,15 +222,15 @@ public class ADLocationManager {
     /**
      * 地址内容自动匹配器
      *
-     * @param fragmentActivity           activity引用
+     * @param context                    上下文
      * @param inputTipsBuilder           匹配参数
      * @param onAdInputTipsQueryListener 回调监听
      */
-    public void getInputTipsQuery(FragmentActivity fragmentActivity, Builder inputTipsBuilder, OnADInputTipsQueryListener onAdInputTipsQueryListener) {
+    public void getInputTipsQuery(Context context, Builder inputTipsBuilder, OnADInputTipsQueryListener onAdInputTipsQueryListener) {
         InputtipsQuery inputTipsQuery = new InputtipsQuery(inputTipsBuilder.getTips(), inputTipsBuilder.getCity());
         inputTipsQuery.setCityLimit(inputTipsBuilder.isLimit());
         inputTipsQuery.setLocation(inputTipsBuilder.getLatLonPoint());
-        Inputtips inputTips = new Inputtips(fragmentActivity, inputTipsQuery);
+        Inputtips inputTips = new Inputtips(context, inputTipsQuery);
         inputTips.setInputtipsListener((list, i) -> {
             if (1000 != i || null == list || 0 == list.size()) {
                 onAdInputTipsQueryListener.onFail(i, "未匹配到查询数据");
@@ -307,7 +305,7 @@ public class ADLocationManager {
      * @param longitude                 纬度
      * @param onADGeocodeSearchListener 回调监听器
      */
-    public void  getGeocodeSearch(Context context, double latitude, double longitude, OnADGeocodeSearchListener onADGeocodeSearchListener) {
+    public void getGeocodeSearch(Context context, double latitude, double longitude, OnADGeocodeSearchListener onADGeocodeSearchListener) {
         GeocodeSearch geocodeSearch;
         try {
             geocodeSearch = new GeocodeSearch(context);
@@ -316,26 +314,26 @@ public class ADLocationManager {
                 @Override
                 public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
                     if (i == 1000) {
-                        if (null != regeocodeResult && null != regeocodeResult.getRegeocodeAddress()){
+                        if (null != regeocodeResult && null != regeocodeResult.getRegeocodeAddress()) {
                             onADGeocodeSearchListener.onRegSearched(regeocodeResult.getRegeocodeAddress());
-                        }else {
-                            onADGeocodeSearchListener.onFail(9999,"未获取到地址信息");
+                        } else {
+                            onADGeocodeSearchListener.onFail(9999, "未获取到地址信息");
                         }
-                    }else{
-                        onADGeocodeSearchListener.onFail(i,"获取定位地址信息异常");
+                    } else {
+                        onADGeocodeSearchListener.onFail(i, "获取定位地址信息异常");
                     }
                 }
 
                 @Override
                 public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
-                    if (i == 1000){
-                        if (null != geocodeResult && null != geocodeResult.getGeocodeAddressList()){
+                    if (i == 1000) {
+                        if (null != geocodeResult && null != geocodeResult.getGeocodeAddressList()) {
                             onADGeocodeSearchListener.onGeocodeSearched(geocodeResult.getGeocodeAddressList());
-                        }else{
-                            onADGeocodeSearchListener.onFail(9999,"未获取到地址信息");
+                        } else {
+                            onADGeocodeSearchListener.onFail(9999, "未获取到地址信息");
                         }
-                    }else {
-                        onADGeocodeSearchListener.onFail(i,"获取定位地址信息异常");
+                    } else {
+                        onADGeocodeSearchListener.onFail(i, "获取定位地址信息异常");
                     }
                 }
             });

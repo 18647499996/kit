@@ -3,6 +3,7 @@ package com.liudonghan.main;
 import android.app.Application;
 
 import com.amap.api.location.AMapLocationClientOption;
+import com.liudonghan.kit.ijk.ADVideoViewManager;
 import com.liudonghan.kit.location.ADLocationManager;
 import com.liudonghan.kit.oss.ADCosServiceManager;
 
@@ -17,8 +18,9 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+//        ADVideoViewManager.getInstance().init();
         ADCosServiceManager.getInstance().setConfig("AKID5zd06vTlnX2GDtJTMyIM9esqWv2sSlnY", "VjgMltkKjsoTrzqPhjUyA6l9F4cttc4F", "shops-1307611133", "ap-beijing");
-        ADLocationManager.getInstance().init(this,  new AMapLocationClientOption()
+        ADLocationManager.getInstance().init(this, new AMapLocationClientOption()
                 .setGpsFirst(true)
                 .setInterval(30000)
                 .setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy)

@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
         findViewById(R.id.bound).setOnClickListener(view -> ADLocationManager.getInstance().getPoiSearch(this,new ADLocationManager.SearchBuilder(),new PoiSearchV2.SearchBound(new LatLonPoint(39.941711, 116.382248),200),this));
         ADLocationManager.getInstance().getGeocodeSearch(this, 39.941711, 116.382248, this);
         VideoView ijkVideoView = findViewById(R.id.ijk);
-        ijkVideoView.setUrl("https://shops-1307611133.cos.ap-beijing.myqcloud.com/Android/Video/Evidence/video_20230202180456792.mp4");
+        ijkVideoView.setUrl("https://1307611133.vod2.myqcloud.com/d60b8334vodbj1307611133/7e59a42a243791579656485956/5bPrqnzlAUQA.mp4");
         StandardVideoController standardVideoController = new StandardVideoController(this);
         ijkVideoView.setVideoController(standardVideoController);
         standardVideoController.addDefaultControlComponent("标题",false);
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
 
     @Override
     public void onSucceed(String result) {
-
+        Log.e(TAG,"OSS地址：" + result);
     }
 
     @Override
