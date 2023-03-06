@@ -70,6 +70,7 @@ dependencies {
     api 'xyz.doikki.android.dkplayer:player-ijk:3.3.7'
     // 可选，如需要缓存或者抖音预加载功能请引入此库
     api 'xyz.doikki.android.dkplayer:videocache:3.3.7'
+    implementation files('libs/push_sdk_v3.0.0.4_484.jar')
 
 
 }
