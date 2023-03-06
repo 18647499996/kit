@@ -16,6 +16,7 @@ import com.amap.api.services.weather.LocalWeatherForecast;
 import com.amap.api.services.weather.LocalWeatherLive;
 import com.amap.api.services.weather.WeatherSearchQuery;
 import com.google.android.exoplayer2.util.Util;
+import com.heytap.msp.push.HeytapPushManager;
 import com.liudonghan.kit.location.ADLocationManager;
 import com.liudonghan.kit.location.listener.OnADGeocodeSearchListener;
 import com.liudonghan.kit.location.listener.OnADInputTipsQueryListener;
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
         standardVideoController.setPlayerState(ijkVideoView.getCurrentPlayerState());
         standardVideoController.setPlayState(ijkVideoView.getCurrentPlayState());
         ijkVideoView.start();
+        HeytapPushManager.init(this,true);
     }
 
     @Override

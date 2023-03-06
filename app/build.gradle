@@ -44,6 +44,18 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    repositories {
+        flatDir {
+            dirs 'libs','../kit/libs'
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDir 'libs'
+            jni.srcDirs = []    //disable automatic ndk-build
+        }
+    }
 }
 
 dependencies {
@@ -55,6 +67,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation project(path: ':kit')
 
-    api 'com.github.18647499996:multi-image-selector:2.0.2'
+    implementation 'com.github.18647499996:multi-image-selector:2.0.2'
 
 }
