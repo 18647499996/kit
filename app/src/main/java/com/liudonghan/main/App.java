@@ -19,7 +19,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         ADVideoViewManager.getInstance().init();
-        ADCosServiceManager.getInstance().setConfig("AKID5zd06vTlnX2GDtJTMyIM9esqWv2sSlnY", "VjgMltkKjsoTrzqPhjUyA6l9F4cttc4F", "shops-1307611133", "ap-beijing");
+        ADCosServiceManager.getInstance().setConfig("", "", "", "");
         ADLocationManager.getInstance().init(this, new AMapLocationClientOption()
                 .setGpsFirst(true)
                 .setInterval(30000)
