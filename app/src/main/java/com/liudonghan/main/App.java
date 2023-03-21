@@ -18,7 +18,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-//        ADVideoViewManager.getInstance().init();
+        ADVideoViewManager.getInstance().init();
         ADCosServiceManager.getInstance().setConfig("AKID5zd06vTlnX2GDtJTMyIM9esqWv2sSlnY", "VjgMltkKjsoTrzqPhjUyA6l9F4cttc4F", "shops-1307611133", "ap-beijing");
         ADLocationManager.getInstance().init(this, new AMapLocationClientOption()
                 .setGpsFirst(true)

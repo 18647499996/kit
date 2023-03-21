@@ -15,7 +15,7 @@ import com.amap.api.services.poisearch.PoiSearchV2;
 import com.amap.api.services.weather.LocalWeatherForecast;
 import com.amap.api.services.weather.LocalWeatherLive;
 import com.amap.api.services.weather.WeatherSearchQuery;
-import com.google.android.exoplayer2.util.Util;
+//import com.google.android.exoplayer2.util.Util;
 import com.heytap.msp.push.HeytapPushManager;
 import com.liudonghan.kit.location.ADLocationManager;
 import com.liudonghan.kit.location.listener.OnADGeocodeSearchListener;
@@ -79,14 +79,14 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
         findViewById(R.id.bound).setOnClickListener(view -> ADLocationManager.getInstance().getPoiSearch(this,new ADLocationManager.SearchBuilder(),new PoiSearchV2.SearchBound(new LatLonPoint(39.941711, 116.382248),200),this));
         ADLocationManager.getInstance().getGeocodeSearch(this, 39.941711, 116.382248, this);
         VideoView ijkVideoView = findViewById(R.id.ijk);
-        ijkVideoView.setUrl("https://1307611133.vod2.myqcloud.com/d60b8334vodbj1307611133/7e59a42a243791579656485956/5bPrqnzlAUQA.mp4");
+        ijkVideoView.setUrl("https://shops-1307611133.cos.ap-beijing.myqcloud.com/Android/Video/Evidence/video_20230310103556208.mp4");
         StandardVideoController standardVideoController = new StandardVideoController(this);
         ijkVideoView.setVideoController(standardVideoController);
         standardVideoController.addDefaultControlComponent("标题",false);
         standardVideoController.setPlayerState(ijkVideoView.getCurrentPlayerState());
         standardVideoController.setPlayState(ijkVideoView.getCurrentPlayState());
         ijkVideoView.start();
-        HeytapPushManager.init(this,true);
+//        HeytapPushManager.init(this,true);
     }
 
     @Override
