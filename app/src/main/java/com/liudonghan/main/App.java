@@ -19,7 +19,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         ADVideoViewManager.getInstance().init();
-        ADCosServiceManager.getInstance().setConfig("", "", "", "");
         ADLocationManager.getInstance().init(this, new AMapLocationClientOption()
                 .setGpsFirst(true)
                 .setInterval(30000)
