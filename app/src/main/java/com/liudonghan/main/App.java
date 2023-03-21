@@ -5,7 +5,6 @@ import android.app.Application;
 import com.amap.api.location.AMapLocationClientOption;
 import com.liudonghan.kit.ijk.ADVideoViewManager;
 import com.liudonghan.kit.location.ADLocationManager;
-import com.liudonghan.kit.oss.ADCosServiceManager;
 
 /**
  * Description：
