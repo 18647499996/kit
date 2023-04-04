@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Kit</string>
+    <string name="system_default_channel"></string>
 </resources>

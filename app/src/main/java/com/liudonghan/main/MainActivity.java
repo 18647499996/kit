@@ -15,8 +15,9 @@ import com.amap.api.services.poisearch.PoiSearchV2;
 import com.amap.api.services.weather.LocalWeatherForecast;
 import com.amap.api.services.weather.LocalWeatherLive;
 import com.amap.api.services.weather.WeatherSearchQuery;
-//import com.google.android.exoplayer2.util.Util;
-import com.heytap.msp.push.HeytapPushManager;
+import com.heytap.mcssdk.PushManager;
+import com.heytap.mcssdk.callback.PushCallback;
+import com.heytap.mcssdk.mode.SubscribeResult;
 import com.liudonghan.kit.location.ADLocationManager;
 import com.liudonghan.kit.location.listener.OnADGeocodeSearchListener;
 import com.liudonghan.kit.location.listener.OnADInputTipsQueryListener;
@@ -76,8 +77,8 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
                         .setCity("北京")
                         .setLimit(true), this));
         findViewById(R.id.keyword).setOnClickListener(view -> ADLocationManager.getInstance().getPoiSearch(this, new ADLocationManager.SearchBuilder("潘家园", "","北京").setPage(1).setLimit(20), this));
-        findViewById(R.id.bound).setOnClickListener(view -> ADLocationManager.getInstance().getPoiSearch(this,new ADLocationManager.SearchBuilder(),new PoiSearchV2.SearchBound(new LatLonPoint(39.941711, 116.382248),200),this));
-        ADLocationManager.getInstance().getGeocodeSearch(this, 39.941711, 116.382248, this);
+        findViewById(R.id.bound).setOnClickListener(view -> ADLocationManager.getInstance().getPoiSearch(this, new ADLocationManager.SearchBuilder(),new PoiSearchV2.SearchBound(new LatLonPoint(39.961275, 116.406478),200),this));
+        ADLocationManager.getInstance().getGeocodeSearch(this, 39.961275, 116.406478, this);
         VideoView ijkVideoView = findViewById(R.id.ijk);
         ijkVideoView.setUrl("https://shops-1307611133.cos.ap-beijing.myqcloud.com/Android/Video/Evidence/video_20230310103556208.mp4");
         StandardVideoController standardVideoController = new StandardVideoController(this);
@@ -86,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
         standardVideoController.setPlayerState(ijkVideoView.getCurrentPlayerState());
         standardVideoController.setPlayState(ijkVideoView.getCurrentPlayState());
         ijkVideoView.start();
-//        HeytapPushManager.init(this,true);
     }
 
     @Override

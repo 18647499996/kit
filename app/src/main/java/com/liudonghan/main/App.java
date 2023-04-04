@@ -1,10 +1,12 @@
 package com.liudonghan.main;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.amap.api.location.AMapLocationClientOption;
 import com.liudonghan.kit.ijk.ADVideoViewManager;
 import com.liudonghan.kit.location.ADLocationManager;
+import com.liudonghan.kit.push.ADPushManager;
 
 /**
  * Description：
@@ -23,6 +25,17 @@ public class App extends Application {
                 .setInterval(30000)
                 .setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy)
                 .setNeedAddress(true));
+        ADPushManager.getInstance().init(this, new ADPushManager.OnADPushManagerListener() {
+            @Override
+            public void onPushTokenSucceed(ADPushManager.BrandType brandType, String pushToken) {
+
+            }
+
+            @Override
+            public void onPushTokenError(ADPushManager.BrandType brandType, int errorCode, String errorMessage) {
+                Log.i("Mac_Liu", errorMessage);
+            }
+        });
 
     }
 }

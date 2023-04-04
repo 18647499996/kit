@@ -11,7 +11,23 @@ android {
         versionCode VERSAION_CODE.toInteger()
         versionName VERSAION_NAME.toString()
         manifestPlaceholders = [
-                MAP_KEY : '8810842a68872e87812bce73f44dd938'
+                // 高德
+                MAP_KEY   : '8810842a68872e87812bce73f44dd938',
+                // 小米
+                MI_APP_ID    : "2882303761518661698",
+                MI_APP_KEY   : "5351866185698",
+                // 华为
+                HMS_APP_ID   : "102877471",
+                // 魅族
+                MEIZU_APP_ID : "134844",
+                MEIZU_APP_KEY: "c2c6159ce9614f1787f339c1a4b69b99",
+                // vivo
+                VIVO_APP_ID  : "104444991",
+                VIVO_APP_KEY : "2c7124f35043962b384c6adee8259c62",
+                // oppo
+                OPPO_APP_KEY  : "0daef59bb48a49c388123bf73eb877ec",
+                OPPO_APP_SECRET : "84e5b792797d48eb88212d57ee295fa7"
+
         ]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
@@ -47,7 +63,7 @@ android {
 
     repositories {
         flatDir {
-            dirs 'libs','../kit/libs'
+            dirs 'libs', '../kit/libs'
         }
     }
     sourceSets {
@@ -64,5 +80,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation project(path: ':kit')
     implementation 'com.github.18647499996:multi-image-selector:2.0.2'
+
+    // javassist动态更改class文件
+    implementation 'org.javassist:javassist:3.29.2-GA'
 
 }

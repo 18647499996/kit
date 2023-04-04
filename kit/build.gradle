@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'maven-publish'//用来推送aar到jitpack
+    id 'com.huawei.agconnect'
 }
 afterEvaluate {
     publishing {
@@ -72,21 +73,23 @@ dependencies {
     api 'com.amap.api:search:9.5.0'
     // 高德地图 or 定位
     api 'com.amap.api:3dmap:9.6.0'
-//    // 必选，内部默认使用系统MediaPlayer进行解码
+    // 必选，内部默认使用系统MediaPlayer进行解码
     api 'xyz.doikki.android.dkplayer:dkplayer-java:3.3.7'
-//    // 可选，包含StandardVideoController的实现
+    // 可选，包含StandardVideoController的实现
     api 'xyz.doikki.android.dkplayer:dkplayer-ui:3.3.7'
-//    // 可选，使用exoPlayer进行解码
-//    api 'xyz.doikki.android.dkplayer:player-exo:3.3.7'
-//    // 可选，使用ijkPlayer进行解码
+    // 可选，使用ijkPlayer进行解码
     api 'xyz.doikki.android.dkplayer:player-ijk:3.3.7'
-//    // 可选，如需要缓存或者抖音预加载功能请引入此库
+    // 可选，如需要缓存或者抖音预加载功能请引入此库
     api 'xyz.doikki.android.dkplayer:videocache:3.3.7'
     // vivo推送
     api files('libs/push_sdk_v3.0.0.4_484.jar')
     // oppo推送
-    api files('libs/com.heytap.msp_3.1.0.jar')
-    api 'commons-codec:commons-codec:1.15'
-
+    api files('libs/mcssdk-2.0.2.jar')
+    // 小米推送
+    api files('libs/MiPush_SDK_Client_3_6_9.jar')
+    // 华为推送
+    api 'com.huawei.hms:push:6.5.0.300'
+    // 魅族推送
+    api 'com.meizu.flyme.internet:push-internal:3.9.7'
 
 }
