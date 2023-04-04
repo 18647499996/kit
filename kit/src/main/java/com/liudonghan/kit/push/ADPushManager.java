@@ -61,7 +61,7 @@ public class ADPushManager {
             switch (ADBrandManager.getInstanceType(context)) {
                 case ADBrandManager.BRAND_OPPO:
                     Log.i(TAG, "ready init oppo push ");
-                    initOppo(context, appInfo.metaData.getString("OPPO_APP_KEY"), appInfo.metaData.getString("OPPO_APP_SECRET"));
+                    initOppo(context, appInfo.metaData.getString("OPPO_APP_PUSH_KEY"), appInfo.metaData.getString("OPPO_APP_PUSH_SECRET"));
                     break;
                 case ADBrandManager.BRAND_XIAOMI:
                     Log.i(TAG, "ready init xiaomi push ");
@@ -73,11 +73,11 @@ public class ADPushManager {
                     break;
                 case ADBrandManager.BRAND_HUAWEI:
                     Log.i(TAG, "ready init hms push ");
-                    initHuawei(context, appInfo.metaData.getString("MIPUSH_APPID"));
+                    initHuawei(context, appInfo.metaData.getString("HMS_APP_ID"));
                     break;
                 case ADBrandManager.BRAND_MEIZU:
                     Log.i(TAG, "ready init fiyme push ");
-                    initMeizu(context, appInfo.metaData.getString("MEIZU_APP_ID"), appInfo.metaData.getString("MEIZU_APP_KEY"));
+                    initMeizu(context, appInfo.metaData.getString("MEIZU_PUSH_APP_ID"), appInfo.metaData.getString("MEIZU_PUSH_APP_KEY"));
                     break;
             }
         } catch (PackageManager.NameNotFoundException | VivoPushException e) {
