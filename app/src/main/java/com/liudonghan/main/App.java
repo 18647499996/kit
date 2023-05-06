@@ -4,7 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.amap.api.location.AMapLocationClientOption;
-import com.liudonghan.kit.ijk.ADVideoViewManager;
+import com.liudonghan.kit.ijk.ADVideoPlayManager;
 import com.liudonghan.kit.location.ADLocationManager;
 import com.liudonghan.kit.push.ADPushManager;
 
@@ -19,7 +19,8 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ADVideoViewManager.getInstance().init();
+        // ijk播放器
+        ADVideoPlayManager.getInstance().init(this);
         ADLocationManager.getInstance().init(this, new AMapLocationClientOption()
                 .setGpsFirst(true)
                 .setInterval(30000)

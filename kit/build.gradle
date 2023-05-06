@@ -26,8 +26,11 @@ android {
         versionCode VERSAION_CODE.toInteger()
         versionName VERSAION_NAME.toString()
         ndk {
-            //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
-            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "arm64-v8a", "x86_64"
+            // 设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
+            // "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "arm64-v8a", "x86_64"
+            // 主流设备适配标准为"armeabi-v7a"（ 多数大厂APP使用标准 ）
+            // 微信由于用户体量问题直接使用"arm64-v8a"标准 放弃部分设备适配
+            abiFilters "arm64-v8a"
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
