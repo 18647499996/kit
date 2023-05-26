@@ -207,7 +207,7 @@ public class ADPushManager {
             Log.i(TAG, " onStateChanged vivo turnOnPush listener：" + i);
             if (null != onADPushManagerListener) {
                 if (!TextUtils.isEmpty(PushClient.getInstance(context).getRegId())) {
-                    onADPushManagerListener.onPushTokenSucceed(BrandType.oppo, PushClient.getInstance(context).getRegId());
+                    onADPushManagerListener.onPushTokenSucceed(BrandType.vivo, PushClient.getInstance(context).getRegId());
                 } else {
                     onADPushManagerListener.onPushTokenError(BrandType.vivo, 100024, "get vivo push token error");
                 }
