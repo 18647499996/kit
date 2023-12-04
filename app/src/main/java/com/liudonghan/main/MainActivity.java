@@ -68,21 +68,21 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
 
                     }
                 }));
-        findViewById(R.id.weather).setOnClickListener(view -> ADLocationManager.getInstance().getCityWeather(this, "北京", WeatherSearchQuery.WEATHER_TYPE_LIVE, this));
+        findViewById(R.id.weather).setOnClickListener(view -> ADLocationManager.getInstance().getCityWeather(this, "北京", WeatherSearchQuery.WEATHER_TYPE_FORECAST, this));
         findViewById(R.id.tips).setOnClickListener(view -> ADLocationManager.getInstance().getInputTipsQuery(this,
                 new ADLocationManager.Builder()
-                        .setTips("潘家园")
-                        .setCity("北京")
+                        .setTips("荷塘月色")
+                        .setCity("武汉")
                         .setLimit(true), this));
-        findViewById(R.id.keyword).setOnClickListener(view -> ADLocationManager.getInstance().getPoiSearch(this, new ADLocationManager.SearchBuilder("潘家园", "","北京").setPage(1).setLimit(20), this));
-        findViewById(R.id.bound).setOnClickListener(view -> ADLocationManager.getInstance().getPoiSearch(this, new ADLocationManager.SearchBuilder(),new PoiSearchV2.SearchBound(new LatLonPoint(39.961275, 116.406478),200),this));
+        findViewById(R.id.keyword).setOnClickListener(view -> ADLocationManager.getInstance().getPoiSearch(this, new ADLocationManager.SearchBuilder("一江赋", "", "武汉").setPage(1).setLimit(50), this));
+        findViewById(R.id.bound).setOnClickListener(view -> ADLocationManager.getInstance().getPoiSearch(this, new ADLocationManager.SearchBuilder(), new PoiSearchV2.SearchBound(new LatLonPoint(39.961275, 116.406478), 200), this));
         ADLocationManager.getInstance().getGeocodeSearch(this, 39.961275, 116.406478, this);
         VideoView ijkVideoView = findViewById(R.id.ijk);
-        String proxyUrl = ADVideoPlayManager.getInstance().getHttpProxyCacheServer().getProxyUrl("https://shops-1307611133.cos.ap-beijing.myqcloud.com/Android/Video/Evidence/video_20230310103556208.mp4");
+        String proxyUrl = ADVideoPlayManager.getInstance().diskCacheStorage("https://cn-gddg-ct-01-22.bilivideo.com/upgcxcode/20/15/1350331520/1350331520-1-192.mp4?e=ig8euxZM2rNcNbNghwdVhwdlhbNVhwdVhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1701684588&gen=playurlv2&os=bcache&oi=249013022&trid=0000d3c5ec0cff9a45adb94f0b62e6068f6eT&mid=77359217&platform=html5&upsig=928293462a66aacfda447dfc482959ef&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform&cdnid=61322&bvc=vod&nettype=0&bw=220482&orderid=0,1&buvid=&build=0&mobi_app=&f=T_0_0&logo=80000000");
         ijkVideoView.setUrl(proxyUrl);
         StandardVideoController standardVideoController = new StandardVideoController(this);
         ijkVideoView.setVideoController(standardVideoController);
-        standardVideoController.addDefaultControlComponent("标题",false);
+        standardVideoController.addDefaultControlComponent("标题", false);
         standardVideoController.setPlayerState(ijkVideoView.getCurrentPlayerState());
         standardVideoController.setPlayState(ijkVideoView.getCurrentPlayState());
         ijkVideoView.start();
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
 
     @Override
     public void onSucceed(String result) {
-        Log.e(TAG,"OSS地址：" + result);
+        Log.e(TAG, "OSS地址：" + result);
     }
 
     @Override
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
 
     @Override
     public void onLocationSucceed(AMapLocation aMapLocation) {
-        Log.d(TAG,"定位信息：" + "\n" +
+        Log.d(TAG, "定位信息：" + "\n" +
                 aMapLocation.getProvince() + "\n" +
                 aMapLocation.getCity() + "\n" +
                 aMapLocation.getCityCode() + "\n" +
@@ -165,12 +165,16 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
 
     @Override
     public void onPoiSearched(ArrayList<PoiItemV2> poi) {
-        Log.i(TAG,"poi检索：" + poi.toString());
+        for (int i = 0; i < poi.size(); i++) {
+            Log.i(TAG, "poi检索：" + poi.get(i).getTitle() + " " + poi.get(i).getProvinceName() + " " + poi.get(i).getCityName() + " - " + poi.get(i).getAdName() + " " + poi.get(i).getSnippet() + " " + poi.get(i).getLatLonPoint().getLongitude() + "," + poi.get(i).getLatLonPoint().getLatitude());
+        }
     }
 
     @Override
     public void onGetInputTipsList(List<Tip> tipList) {
-        Log.i(TAG,"搜索列表：" + tipList.toString());
+        for (int i = 0; i < tipList.size(); i++) {
+            Log.i(TAG, "poi检索：" + tipList.get(i).getAddress() + " " + tipList.get(i).getName() + " " + tipList.get(i).getPoint().getLongitude() + "," + tipList.get(i).getPoint().getLatitude());
+        }
     }
 
     @Override
@@ -180,12 +184,12 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
 
     @Override
     public void onPoiItemSearched(PoiItemV2 poiItem) {
-        Log.i(TAG,"poi检索条目：" + poiItem.toString());
+        Log.i(TAG, "poi检索条目：" + poiItem.toString());
     }
 
     @Override
     public void onRegSearched(RegeocodeAddress regeocodeAddress) {
-        Log.i(TAG,"逆地理位置编码：" + regeocodeAddress.getFormatAddress());
+        Log.i(TAG, "逆地理位置编码：" + regeocodeAddress.getFormatAddress());
     }
 
     @Override

@@ -51,9 +51,20 @@ public class ADVideoPlayManager {
 
     /**
      * 获取适配缓存配置
+     *
      * @return HttpProxyCacheServer
      */
     public HttpProxyCacheServer getHttpProxyCacheServer() {
         return httpProxyCacheServer;
+    }
+
+    /**
+     * 设置磁盘缓存
+     *
+     * @param url 播放路径
+     * @return String
+     */
+    public String diskCacheStorage(String url) {
+        return getHttpProxyCacheServer().getProxyUrl(url);
     }
 }

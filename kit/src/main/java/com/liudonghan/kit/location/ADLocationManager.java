@@ -122,7 +122,7 @@ public class ADLocationManager {
     }
 
     /**
-     * 初始化定位
+     * todo 初始化定位
      *
      * @param context                  上下文
      * @param aMapLocationClientOption 定位参数配置
@@ -148,7 +148,7 @@ public class ADLocationManager {
     }
 
     /**
-     * 注册定位监听
+     * todo 注册定位监听
      *
      * @param onADLocationUtilsListener 监听回调
      */
@@ -173,7 +173,7 @@ public class ADLocationManager {
     }
 
     /**
-     * 获取高德天气情况
+     * todo 获取高德天气情况
      *
      * @param context                   上下文
      * @param city                      城市
@@ -220,7 +220,7 @@ public class ADLocationManager {
     }
 
     /**
-     * 地址内容自动匹配器
+     * todo 地址内容自动匹配器
      *
      * @param context                    上下文
      * @param inputTipsBuilder           匹配参数
@@ -249,7 +249,7 @@ public class ADLocationManager {
     }
 
     /**
-     * 关键字检索POI
+     * todo 关键字检索POI
      *
      * @param context               上下文
      * @param query                 查询参数
@@ -261,7 +261,7 @@ public class ADLocationManager {
     }
 
     /**
-     * 获取周边检索
+     * todo 获取周边检索
      *
      * @param context               上下文
      * @param query                 检索条件参数
@@ -298,7 +298,7 @@ public class ADLocationManager {
     }
 
     /**
-     * 获取逆地理位置编码（ 经纬度坐标转地址信息 ）
+     * todo 获取逆地理位置编码（ 经纬度坐标转地址信息 ）
      *
      * @param context                   上下文
      * @param latitude                  经度
@@ -343,7 +343,7 @@ public class ADLocationManager {
     }
 
     /**
-     * 开启定位
+     * todo 开启定位
      */
     public void startLocation() {
         if (null == aMapLocationClient) {
@@ -354,7 +354,7 @@ public class ADLocationManager {
     }
 
     /**
-     * 停止定位
+     * todo 停止定位
      */
     public void stopLocation() {
         if (null == aMapLocationClient) {
@@ -365,7 +365,7 @@ public class ADLocationManager {
     }
 
     /**
-     * 销毁
+     * todo 销毁
      */
     public void destroyLocation() {
         if (aMapLocationClient != null) {
@@ -377,7 +377,7 @@ public class ADLocationManager {
 
 
     /**
-     * 通过经纬度获取距离(单位：米)
+     * todo 通过经纬度获取距离(单位：米)
      *
      * @param lng1 经度1
      * @param lat1 纬度1
@@ -402,7 +402,7 @@ public class ADLocationManager {
 
 
     /**
-     * 距离格式化
+     * todo 距离格式化
      *
      * @param distance 以千米为单位
      * @return Stirng
@@ -426,7 +426,7 @@ public class ADLocationManager {
     }
 
     /**
-     * 百度坐标转高德（传入经度、纬度）
+     * todo 百度坐标转高德（传入经度、纬度）
      *
      * @param lng 百度经度
      * @param lat 百度纬度
@@ -444,7 +444,7 @@ public class ADLocationManager {
     }
 
     /**
-     * 高德坐标转百度（传入经度、纬度）
+     * todo 高德坐标转百度（传入经度、纬度）
      *
      * @param lng 高德经度
      * @param lat 高德纬度
