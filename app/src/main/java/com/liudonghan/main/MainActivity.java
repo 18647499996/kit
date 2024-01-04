@@ -15,6 +15,7 @@ import com.amap.api.services.poisearch.PoiSearchV2;
 import com.amap.api.services.weather.LocalWeatherForecast;
 import com.amap.api.services.weather.LocalWeatherLive;
 import com.amap.api.services.weather.WeatherSearchQuery;
+import com.liudonghan.kit.ijk.ADTikTokController;
 import com.liudonghan.kit.ijk.ADVideoPlayManager;
 import com.liudonghan.kit.location.ADLocationManager;
 import com.liudonghan.kit.location.listener.OnADGeocodeSearchListener;
@@ -33,6 +34,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import xyz.doikki.videocontroller.StandardVideoController;
+import xyz.doikki.videocontroller.component.CompleteView;
+import xyz.doikki.videocontroller.component.ErrorView;
+import xyz.doikki.videocontroller.component.PrepareView;
+import xyz.doikki.videocontroller.component.VodControlView;
 import xyz.doikki.videoplayer.player.VideoView;
 
 public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnPayResultListener, ADCosServiceManager.OnUploadListener, OnADLocationUtilsListener, OnADWeatherSearchListener, OnADInputTipsQueryListener, OnADPoiSearchListener, OnADGeocodeSearchListener {
@@ -78,13 +83,15 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
         findViewById(R.id.bound).setOnClickListener(view -> ADLocationManager.getInstance().getPoiSearch(this, new ADLocationManager.SearchBuilder(), new PoiSearchV2.SearchBound(new LatLonPoint(39.961275, 116.406478), 200), this));
         ADLocationManager.getInstance().getGeocodeSearch(this, 39.961275, 116.406478, this);
         VideoView ijkVideoView = findViewById(R.id.ijk);
-        String proxyUrl = ADVideoPlayManager.getInstance().diskCacheStorage("https://cn-gddg-ct-01-22.bilivideo.com/upgcxcode/20/15/1350331520/1350331520-1-192.mp4?e=ig8euxZM2rNcNbNghwdVhwdlhbNVhwdVhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1701684588&gen=playurlv2&os=bcache&oi=249013022&trid=0000d3c5ec0cff9a45adb94f0b62e6068f6eT&mid=77359217&platform=html5&upsig=928293462a66aacfda447dfc482959ef&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform&cdnid=61322&bvc=vod&nettype=0&bw=220482&orderid=0,1&buvid=&build=0&mobi_app=&f=T_0_0&logo=80000000");
-        ijkVideoView.setUrl(proxyUrl);
-        StandardVideoController standardVideoController = new StandardVideoController(this);
-        ijkVideoView.setVideoController(standardVideoController);
-        standardVideoController.addDefaultControlComponent("标题", false);
-        standardVideoController.setPlayerState(ijkVideoView.getCurrentPlayerState());
-        standardVideoController.setPlayState(ijkVideoView.getCurrentPlayState());
+//        String proxyUrl = ADVideoPlayManager.getInstance().diskCacheStorage("https://recordcdn.quklive.com/upload/vod/user1462960877450854/1702396014865166/8/video.m3u8");
+        ijkVideoView.setUrl("https://v95-sz-cold.douyinvod.com/9f6fffe87481bbc3d2abeb87fc8c8b8e/65852c02/video/tos/cn/tos-cn-ve-15/oEJ7TBDGeIEucCaYBFf4YHAInbAceBQI9CQLLE/?a=1128&ch=26&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C3&cv=1&br=1383&bt=1383&cs=0&ds=6&ft=BachJVVywSyRKJ80mo~hFJ4YA0piiBlPejKJBUwSk.0P3-I&mime_type=video_mp4&qs=0&rc=NjRpO2llaDk4aGg8NDM0OEBpajt1Mzw6Zng4cDMzNGkzM0BgMDQwLzMtXjQxX2E1LzFjYSMxbmtlcjQwcy5gLS1kLWFzcw%3D%3D&btag=10e000a0000&dy_q=1703222722&feature_id=f0150a16a324336cda5d6dd0b69ed299&l=2023122213252215B1EB7D25D6F504CD26");
+//        ijkVideoView.setUrl(proxyUrl);
+        ADTikTokController tikTokController = new ADTikTokController(this);
+        ijkVideoView.setVideoController(tikTokController);
+        tikTokController.addControlComponent(new CompleteView(this), new ErrorView(this), new PrepareView(this), new VodControlView(this));
+//        standardVideoController.addDefaultControlComponent("标题", false);
+//        standardVideoController.setPlayerState(ijkVideoView.getCurrentPlayerState());
+//        standardVideoController.setPlayState(ijkVideoView.getCurrentPlayState());
         ijkVideoView.start();
     }
 

@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 31
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.liudonghan.kit"
         minSdkVersion 19
-        targetSdkVersion 29
+        targetSdkVersion 31
         versionCode VERSAION_CODE.toInteger()
         versionName VERSAION_NAME.toString()
         manifestPlaceholders = [
@@ -25,8 +25,8 @@ android {
                 VIVO_APP_ID  : "104444991",
                 VIVO_APP_KEY : "2c7124f35043962b384c6adee8259c62",
                 // oppo
-                OPPO_APP_KEY  : "0daef59bb48a49c388123bf73eb877ec",
-                OPPO_APP_SECRET : "84e5b792797d48eb88212d57ee295fa7"
+                OPPO_APP_KEY  : "62c083e4b8a046ccbc688a4cd7e613fa",
+                OPPO_APP_SECRET : "1eb7765f3853401183d04cce3fbbf92f"
 
         ]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
