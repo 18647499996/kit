@@ -41,5 +41,15 @@
       <option name="name" value="maven2" />
       <option name="url" value="https://developer.huawei.com/repo/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven3" />
+      <option name="name" value="maven3" />
+      <option name="url" value="https://maven.columbus.heytapmobi.com/repository/releases/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven4" />
+      <option name="name" value="maven4" />
+      <option name="url" value="http://nexus.os.adc.com/nexus/content/groups/public" />
+    </remote-repository>
   </component>
 </project>

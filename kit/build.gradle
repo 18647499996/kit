@@ -17,12 +17,12 @@ afterEvaluate {
     }
 }
 android {
-    compileSdkVersion 29
+    compileSdkVersion 33
     buildToolsVersion "29.0.3"
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 29
+        targetSdkVersion 33
         versionCode VERSAION_CODE.toInteger()
         versionName VERSAION_NAME.toString()
         ndk {
@@ -90,11 +90,17 @@ dependencies {
     // vivo推送
     api files('libs/push_sdk_v3.0.0.4_484.jar')
     // oppo推送
-    api files('libs/mcssdk-2.0.2.jar')
+//    api files('libs/mcssdk-2.0.2.jar')
     // 小米推送
     api files('libs/MiPush_SDK_Client_3_6_9.jar')
     // 华为推送
     api 'com.huawei.hms:push:6.5.0.300'
     // 魅族推送
     api 'com.meizu.flyme.internet:push-internal:3.9.7'
+    // OPPO推送
+    api 'com.heytap.msp:push:3.0.0@aar'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'commons-codec:commons-codec:1.15'
+    implementation 'androidx.annotation:annotation:1.3.0'
+//    api files('libs/pushOpenClient_v3.0.0.7_488_cb59933_release.jar')
 }

@@ -19,7 +19,8 @@ public class PushMessageReceiver extends HmsMessageService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        Log.i(TAG, "onMessageReceived huawei listener");
+        Log.i(TAG, "onMessageReceived huawei listener：" + remoteMessage.getData());
+
     }
 
     @Override

@@ -1,38 +1,42 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.liudonghan.kit"
+        applicationId "com.lawxp.xflife"
         minSdkVersion 19
-        targetSdkVersion 31
+        targetSdkVersion 30
         versionCode VERSAION_CODE.toInteger()
         versionName VERSAION_NAME.toString()
+        multiDexEnabled true
         manifestPlaceholders = [
+                // 包名
+                AD_PACKAGE_NAME  : applicationId,
                 // 高德
-                MAP_KEY   : '8810842a68872e87812bce73f44dd938',
+                MAP_KEY          : '3a83d6e0dc3928e55c44861ee0fc9161',
                 // 小米
-                MI_APP_ID    : "2882303761518661698",
-                MI_APP_KEY   : "5351866185698",
+                MI_APP_ID        : "Mi-2882303761519966238",
+                MI_APP_KEY       : "Mi-5491996692238",
                 // 华为
-                HMS_APP_ID   : "102877471",
+                HMS_APP_ID       : 'Hms-103820055',
                 // 魅族
-                MEIZU_APP_ID : "134844",
-                MEIZU_APP_KEY: "c2c6159ce9614f1787f339c1a4b69b99",
+                MEIZU_APP_ID     : "134844",
+                MEIZU_APP_KEY    : "c2c6159ce9614f1787f339c1a4b69b99",
                 // vivo
-                VIVO_APP_ID  : "104444991",
-                VIVO_APP_KEY : "2c7124f35043962b384c6adee8259c62",
+                VIVO_APP_ID      : "105467123",
+                VIVO_APP_KEY     : "50265970d180addb1c6bf5862f488443",
+                VIVO_APP_SECRET  : "6428892e-0bd1-4f4d-8f6a-f34a8f996f0b",
                 // oppo
-                OPPO_APP_KEY  : "62c083e4b8a046ccbc688a4cd7e613fa",
-                OPPO_APP_SECRET : "1eb7765f3853401183d04cce3fbbf92f"
+                OPPO_APP_KEY     : "62c083e4b8a046ccbc688a4cd7e613fa",
+                OPPO_APP_SECRET  : "1eb7765f3853401183d04cce3fbbf92f"
 
         ]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
 
     }
+
     signingConfigs {
         release {
             keyAlias 'xflife'
@@ -80,8 +84,5 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation project(path: ':kit')
     implementation 'com.github.18647499996:multi-image-selector:2.0.2'
-
-    // javassist动态更改class文件
-    implementation 'org.javassist:javassist:3.29.2-GA'
 
 }

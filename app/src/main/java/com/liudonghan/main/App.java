@@ -29,7 +29,7 @@ public class App extends Application {
         ADPushManager.getInstance().init(this, new ADPushManager.OnADPushManagerListener() {
             @Override
             public void onPushTokenSucceed(ADPushManager.BrandType brandType, String pushToken) {
-
+                Log.i("Mac_Liu", brandType.name() + " ----- " + pushToken);
             }
 
             @Override
