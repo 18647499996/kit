@@ -30,15 +30,15 @@ public class PushMessageReceiver extends MzPushMessageReceiver {
     private static final String TAG = "Mac_Liu";
 
     @Override
-    public void onRegister(Context context, String pushId) {
-        Log.i(TAG, "onRegister meizu pushId = " + pushId);
-
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+        Log.i(TAG, "onReceive meizu Listener ：" + intent.toString());
     }
 
     @Override
-    public void onUnRegister(Context context, boolean success) {
-        Log.i(TAG, "onUnRegister meizu listener ：" + success);
-
+    public void onMessage(Context context, String s, String s1) {
+        super.onMessage(context, s, s1);
+        Log.i(TAG, "onMessage meizu Listener ：" + s1);
     }
 
     @Override
@@ -82,24 +82,6 @@ public class PushMessageReceiver extends MzPushMessageReceiver {
     public void onNotificationDeleted(Context context, MzPushMessage mzPushMessage) {
         super.onNotificationDeleted(context, mzPushMessage);
         Log.i(TAG, "onNotificationDeleted meizu Listener ：" + mzPushMessage.toString());
-    }
-
-    @Override
-    public void onNotifyMessageArrived(Context context, String message) {
-        super.onNotifyMessageArrived(context, message);
-        Log.i(TAG, "onNotifyMessageArrived meizu Listener ：" + message);
-    }
-
-
-    @Override
-    public void onMessage(Context context, String message) {
-        Log.i(TAG, "onMessage meizu Listener ：" + message);
-    }
-
-    @Override
-    public void onMessage(Context context, Intent intent) {
-        String json = toJson(intent);
-        onMessage(context, json);
     }
 
     public String toJson(Intent intent) {

@@ -19,6 +19,16 @@
     <uses-permission android:name="${AD_PACKAGE_NAME}.permission.MIPUSH_RECEIVE"/>
     <uses-permission android:name="android.permission.GET_TASKS"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
+
+    <!-- 兼容Flyme5的权限配置-->
+    <uses-permission android:name="com.meizu.flyme.push.permission.RECEIVE" />
+    <permission android:name="${AD_PACKAGE_NAME}.push.permission.MESSAGE" android:protectionLevel="signature"/>
+    <uses-permission android:name="${AD_PACKAGE_NAME}.push.permission.MESSAGE" />
+    <!-- 兼容Flyme3的权限配置-->
+    <uses-permission android:name="com.meizu.c2dm.permission.RECEIVE" />
+    <permission android:name="${AD_PACKAGE_NAME}.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <uses-permission android:name="${AD_PACKAGE_NAME}.permission.C2D_MESSAGE"/>
+
     <application
         android:allowBackup="true"
         android:supportsRtl="true">
@@ -134,7 +144,7 @@
                 <action android:name="com.meizu.c2dm.intent.REGISTRATION" />
                 <action android:name="com.meizu.c2dm.intent.RECEIVE" />
 
-                <category android:name="${applicationId}" />
+                <category android:name="${AD_PACKAGE_NAME}" />
             </intent-filter>
         </receiver>
 

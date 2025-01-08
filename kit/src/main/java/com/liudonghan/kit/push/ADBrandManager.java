@@ -3,8 +3,6 @@ package com.liudonghan.kit.push;
 import android.content.Context;
 import android.os.Build;
 
-import com.meizu.cloud.pushsdk.util.MzSystemUtils;
-
 public class ADBrandManager {
 
     public static final int BRAND_HUAWEI = 2001;
@@ -29,8 +27,7 @@ public class ADBrandManager {
     public static boolean isBrandMeizu(Context context) {
         return "meizu".equalsIgnoreCase(getBuildBrand())
                 || "meizu".equalsIgnoreCase(getBuildManufacturer())
-                || "22c4185e".equalsIgnoreCase(getBuildBrand())
-                || MzSystemUtils.isBrandMeizu(context);
+                || "22c4185e".equalsIgnoreCase(getBuildBrand());
     }
 
     public static boolean isBrandOppo() {

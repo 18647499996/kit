@@ -43,7 +43,7 @@ import xyz.doikki.videoplayer.player.VideoView;
 public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnPayResultListener, ADCosServiceManager.OnUploadListener, OnADLocationUtilsListener, OnADWeatherSearchListener, OnADInputTipsQueryListener, OnADPoiSearchListener, OnADGeocodeSearchListener {
 
     private static final String TAG = "Mac_Liu";
-
+    // https://v1.kwaicdn.com/upic/2024/02/21/17/BMjAyNDAyMjExNzE0MDhfMzM5MjUyOTEyNl8xMjU1NjgzMDczNDlfMF8z_hd15_B868895bcc4150326a071d4d1619a62fc.mp4?pkey=AAVO9mqPaX5JjraHc4Nk9f9l2d7YBvQ9JMGYPV544cRhc5WNvQe6W9iEPgcvDRoY_TSmKgx-Nfp0Y-WQs4wmnqh9EewvuXgoEePCYFoYuoHAWcB3auBchJ5naD2DQN5VCBE&tag=1-1708567193-unknown-1-nstvtcyr2p-6e4db18933fc2b98&clientCacheKey=3x9npqr7ib7xzva_hd15.mp4&di=6527d6d2&bp=14944&tt=hd15&ss=vp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
         ADLocationManager.getInstance().getGeocodeSearch(this, 39.961275, 116.406478, this);
         VideoView ijkVideoView = findViewById(R.id.ijk);
 //        String proxyUrl = ADVideoPlayManager.getInstance().diskCacheStorage("https://recordcdn.quklive.com/upload/vod/user1462960877450854/1702396014865166/8/video.m3u8");
-        ijkVideoView.setUrl("https://v95-sz-cold.douyinvod.com/9f6fffe87481bbc3d2abeb87fc8c8b8e/65852c02/video/tos/cn/tos-cn-ve-15/oEJ7TBDGeIEucCaYBFf4YHAInbAceBQI9CQLLE/?a=1128&ch=26&cr=3&dr=0&lr=all&cd=0%7C0%7C0%7C3&cv=1&br=1383&bt=1383&cs=0&ds=6&ft=BachJVVywSyRKJ80mo~hFJ4YA0piiBlPejKJBUwSk.0P3-I&mime_type=video_mp4&qs=0&rc=NjRpO2llaDk4aGg8NDM0OEBpajt1Mzw6Zng4cDMzNGkzM0BgMDQwLzMtXjQxX2E1LzFjYSMxbmtlcjQwcy5gLS1kLWFzcw%3D%3D&btag=10e000a0000&dy_q=1703222722&feature_id=f0150a16a324336cda5d6dd0b69ed299&l=2023122213252215B1EB7D25D6F504CD26");
+        ijkVideoView.setUrl("https://recordcdn.quklive.com/upload/vod/user1462960877450854/1708396984566219/8/video.m3u8");
 //        ijkVideoView.setUrl(proxyUrl);
         ADTikTokController tikTokController = new ADTikTokController(this);
         ijkVideoView.setVideoController(tikTokController);
