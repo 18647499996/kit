@@ -43,6 +43,7 @@ import xyz.doikki.videoplayer.player.VideoView;
 public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnPayResultListener, ADCosServiceManager.OnUploadListener, OnADLocationUtilsListener, OnADWeatherSearchListener, OnADInputTipsQueryListener, OnADPoiSearchListener, OnADGeocodeSearchListener {
 
     private static final String TAG = "Mac_Liu";
+
     // https://v1.kwaicdn.com/upic/2024/02/21/17/BMjAyNDAyMjExNzE0MDhfMzM5MjUyOTEyNl8xMjU1NjgzMDczNDlfMF8z_hd15_B868895bcc4150326a071d4d1619a62fc.mp4?pkey=AAVO9mqPaX5JjraHc4Nk9f9l2d7YBvQ9JMGYPV544cRhc5WNvQe6W9iEPgcvDRoY_TSmKgx-Nfp0Y-WQs4wmnqh9EewvuXgoEePCYFoYuoHAWcB3auBchJ5naD2DQN5VCBE&tag=1-1708567193-unknown-1-nstvtcyr2p-6e4db18933fc2b98&clientCacheKey=3x9npqr7ib7xzva_hd15.mp4&di=6527d6d2&bp=14944&tt=hd15&ss=vp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +168,13 @@ public class MainActivity extends AppCompatActivity implements ADAliPayUtils.OnP
 
     @Override
     public void onWeatherForecastSearched(LocalWeatherForecast localWeatherForecast) {
-        Log.i(TAG, "天气预报：" + localWeatherForecast.getWeatherForecast().toString());
+        for (int i = 0; i < localWeatherForecast.getWeatherForecast().size(); i++) {
+            Log.i(TAG, "天气预报：" + localWeatherForecast.getWeatherForecast().get(i).getWeek() + "\n"
+                    + localWeatherForecast.getWeatherForecast().get(i).getDayWeather() + "\n"
+                    + localWeatherForecast.getWeatherForecast().get(i).getNightWeather() + "\n"
+                    + localWeatherForecast.getWeatherForecast().get(i).getDayWindDirection()
+            );
+        }
     }
 
     @Override

@@ -15,22 +15,22 @@ android {
                 // 包名
                 AD_PACKAGE_NAME  : applicationId,
                 // 高德
-                MAP_KEY          : '3a83d6e0dc3928e55c44861ee0fc9161',
+                MAP_KEY          : '请填写您的MapKey',
                 // 小米
-                MI_APP_ID        : "Mi-2882303761519966238",
-                MI_APP_KEY       : "Mi-5491996692238",
+                MI_APP_ID        : "请填写您的AppId",
+                MI_APP_KEY       : "请填写您的AppKey",
                 // 华为
-                HMS_APP_ID       : 'Hms-103820055',
+                HMS_APP_ID       : '请填写您的AppId',
                 // 魅族
-                MEIZU_APP_ID     : "134844",
-                MEIZU_APP_KEY    : "c2c6159ce9614f1787f339c1a4b69b99",
+                MEIZU_APP_ID     : "请填写您的AppId",
+                MEIZU_APP_KEY    : "请填写您的AppKey",
                 // vivo
-                VIVO_APP_ID      : "105467123",
-                VIVO_APP_KEY     : "50265970d180addb1c6bf5862f488443",
-                VIVO_APP_SECRET  : "6428892e-0bd1-4f4d-8f6a-f34a8f996f0b",
+                VIVO_APP_ID      : "请填写您的AppId",
+                VIVO_APP_KEY     : "请填写您的AppKey",
+                VIVO_APP_SECRET  : "请填写您的AppSecret",
                 // oppo
-                OPPO_APP_KEY     : "62c083e4b8a046ccbc688a4cd7e613fa",
-                OPPO_APP_SECRET  : "1eb7765f3853401183d04cce3fbbf92f"
+                OPPO_APP_KEY     : "请填写您的AppKey",
+                OPPO_APP_SECRET  : "请填写您的AppSecret"
 
         ]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
